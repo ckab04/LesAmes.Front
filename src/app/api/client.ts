@@ -86,7 +86,7 @@ export interface IClient {
     /**
      * @return OK
      */
-    login(email: string, password: string): Observable<TokenResponseDtoTask>;
+    login(email: string, password: string): Observable<AuthenticatedUserInfoDtoTask>;
     /**
      * @return OK
      */
@@ -1083,7 +1083,7 @@ export class Client implements IClient {
     /**
      * @return OK
      */
-    login(email: string, password: string): Observable<TokenResponseDtoTask> {
+    login(email: string, password: string): Observable<AuthenticatedUserInfoDtoTask> {
         let url_ = this.baseUrl + "/users/login?";
         if (email === undefined || email === null)
             throw new globalThis.Error("The parameter 'email' must be defined and cannot be null.");
@@ -1110,14 +1110,14 @@ export class Client implements IClient {
                 try {
                     return this.processLogin(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<TokenResponseDtoTask>;
+                    return _observableThrow(e) as any as Observable<AuthenticatedUserInfoDtoTask>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<TokenResponseDtoTask>;
+                return _observableThrow(response_) as any as Observable<AuthenticatedUserInfoDtoTask>;
         }));
     }
 
-    protected processLogin(response: HttpResponseBase): Observable<TokenResponseDtoTask> {
+    protected processLogin(response: HttpResponseBase): Observable<AuthenticatedUserInfoDtoTask> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1128,7 +1128,7 @@ export class Client implements IClient {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = TokenResponseDtoTask.fromJS(resultData200);
+            result200 = AuthenticatedUserInfoDtoTask.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1136,7 +1136,7 @@ export class Client implements IClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<TokenResponseDtoTask>(null as any);
+        return _observableOf<AuthenticatedUserInfoDtoTask>(null as any);
     }
 
     /**
@@ -1973,6 +1973,122 @@ export interface IAssembly {
     globalAssemblyCache?: boolean;
     hostContext?: number;
     securityRuleSet?: SecurityRuleSet;
+}
+
+export class AuthenticatedUserInfoDto implements IAuthenticatedUserInfoDto {
+    firstName?: string | undefined;
+    lastName?: string | undefined;
+    tokensInfo?: TokenResponseDto;
+
+    constructor(data?: IAuthenticatedUserInfoDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.firstName = _data["firstName"];
+            this.lastName = _data["lastName"];
+            this.tokensInfo = _data["tokensInfo"] ? TokenResponseDto.fromJS(_data["tokensInfo"]) : undefined as any;
+        }
+    }
+
+    static fromJS(data: any): AuthenticatedUserInfoDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AuthenticatedUserInfoDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["firstName"] = this.firstName;
+        data["lastName"] = this.lastName;
+        data["tokensInfo"] = this.tokensInfo ? this.tokensInfo.toJSON() : undefined as any;
+        return data;
+    }
+}
+
+export interface IAuthenticatedUserInfoDto {
+    firstName?: string | undefined;
+    lastName?: string | undefined;
+    tokensInfo?: TokenResponseDto;
+}
+
+export class AuthenticatedUserInfoDtoTask implements IAuthenticatedUserInfoDtoTask {
+    readonly id?: number;
+    exception?: AggregateException;
+    status?: TaskStatus;
+    readonly isCanceled?: boolean;
+    readonly isCompleted?: boolean;
+    readonly isCompletedSuccessfully?: boolean;
+    creationOptions?: TaskCreationOptions;
+    readonly asyncState?: any | undefined;
+    readonly isFaulted?: boolean;
+    result?: AuthenticatedUserInfoDto;
+
+    constructor(data?: IAuthenticatedUserInfoDtoTask) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (this as any).id = _data["id"];
+            this.exception = _data["exception"] ? AggregateException.fromJS(_data["exception"]) : undefined as any;
+            this.status = _data["status"];
+            (this as any).isCanceled = _data["isCanceled"];
+            (this as any).isCompleted = _data["isCompleted"];
+            (this as any).isCompletedSuccessfully = _data["isCompletedSuccessfully"];
+            this.creationOptions = _data["creationOptions"];
+            (this as any).asyncState = _data["asyncState"];
+            (this as any).isFaulted = _data["isFaulted"];
+            this.result = _data["result"] ? AuthenticatedUserInfoDto.fromJS(_data["result"]) : undefined as any;
+        }
+    }
+
+    static fromJS(data: any): AuthenticatedUserInfoDtoTask {
+        data = typeof data === 'object' ? data : {};
+        let result = new AuthenticatedUserInfoDtoTask();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["exception"] = this.exception ? this.exception.toJSON() : undefined as any;
+        data["status"] = this.status;
+        data["isCanceled"] = this.isCanceled;
+        data["isCompleted"] = this.isCompleted;
+        data["isCompletedSuccessfully"] = this.isCompletedSuccessfully;
+        data["creationOptions"] = this.creationOptions;
+        data["asyncState"] = this.asyncState;
+        data["isFaulted"] = this.isFaulted;
+        data["result"] = this.result ? this.result.toJSON() : undefined as any;
+        return data;
+    }
+}
+
+export interface IAuthenticatedUserInfoDtoTask {
+    id?: number;
+    exception?: AggregateException;
+    status?: TaskStatus;
+    isCanceled?: boolean;
+    isCompleted?: boolean;
+    isCompletedSuccessfully?: boolean;
+    creationOptions?: TaskCreationOptions;
+    asyncState?: any | undefined;
+    isFaulted?: boolean;
+    result?: AuthenticatedUserInfoDto;
 }
 
 export class BooleanTask implements IBooleanTask {

@@ -1,19 +1,19 @@
-import { RedirectCommand, Router, Routes, UrlTree } from "@angular/router";
+import { Routes } from "@angular/router";
 import { LayoutComponent } from "./layouts/layout/layout.component";
 import { Error404Component } from "./views/auth/error404/error404.component";
 import { Error500Component } from "./views/auth/error500/error500.component";
 import { MaintenanceComponent } from "./views/auth/maintenance/maintenance.component";
-import { inject } from "@angular/core";
 import { AuthenticationService } from "./core/service/auth.service";
 import { authGuard } from "./core/service/auth.guard";
 import { BlogsComponent } from "./views/pages/blogs/blogs.component";
 import { ProjectComponent } from "./views/applications/projects/project/project.component";
 import { ClientsComponent } from "./views/applications/projects/clients/clients.component";
+import { LoginComponent } from "./views/auth/login/login.component";
 
 export const routes: Routes = [
   {
     path: "",
-    component: BlogsComponent,
+    component: LoginComponent,
     pathMatch: "full",
   },
   {
