@@ -1,13 +1,17 @@
-import { inject, Injectable } from '@angular/core'
+import { inject, Inject, Injectable } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { of } from 'rxjs'
-import { exhaustMap } from 'rxjs/operators'
+import { catchError, exhaustMap, map } from 'rxjs/operators'
 import {
+  login,
+  loginFailure,
+  loginSuccess,
   logout,
   logoutSuccess,
 } from './authentication.actions'
 import { AuthenticationService } from '@/app/core/service/auth.service'
+import { User } from './auth.model'
 
 @Injectable()
 export class AuthenticationEffects {
@@ -20,6 +24,25 @@ export class AuthenticationEffects {
     private router: Router,
     private route: ActivatedRoute
   ) { }
+
+  login$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(login),
+      exhaustMap(({ email, password }) => {
+        return this.AuthenticationService.login(email, password).pipe(
+          map((user: User) => {
+            if (user) {
+              const returnUrl =
+                this.route.snapshot.queryParams['returnUrl'] || '/'
+              this.router.navigateByUrl(returnUrl)
+            }
+            return loginSuccess({ user })
+          }),
+          catchError((error) => of(loginFailure({ error })))
+        )
+      })
+    )
+  )
 
   logout$ = createEffect(() =>
     this.actions$.pipe(

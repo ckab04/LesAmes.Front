@@ -19,15 +19,17 @@ import { Store } from '@ngrx/store'
 })
 export class LoginComponent implements OnInit {
   signInForm!: UntypedFormGroup
-  submitted: boolean = false
+  loading = false
+  hasWrongCredentials = false
+  submitted = false
 
   public fb = inject(UntypedFormBuilder)
   public store = inject(Store)
 
   ngOnInit(): void {
     this.signInForm = this.fb.group({
-      email: ['user@demo.com', [Validators.required, Validators.email]],
-      password: ['123456', [Validators.required]],
+      email: ['tonmail@gmail.com', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
     })
   }
 
