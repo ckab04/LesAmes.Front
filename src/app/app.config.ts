@@ -2,35 +2,33 @@ import {
   ApplicationConfig,
   isDevMode,
   provideZoneChangeDetection,
-} from '@angular/core'
+} from "@angular/core";
 import {
   provideRouter,
   withInMemoryScrolling,
   type InMemoryScrollingFeature,
   type InMemoryScrollingOptions,
-} from '@angular/router'
-import { provideStoreDevtools } from '@ngrx/store-devtools'
-import { routes } from './app.routes'
-import { provideEffects } from '@ngrx/effects'
-import { DatePipe, DecimalPipe } from '@angular/common'
-import { AuthenticationEffects } from './store/authentication/authentication.effects'
-import {
-  provideHttpClient,
-  withInterceptors
-} from '@angular/common/http'
-import { FakeBackendProvider } from './core/helpers/fake-backend'
-import { CalendarEffects } from './store/calendar/calendar.effects'
-import { KanbanEffects } from './store/kanban/kanban.effects'
-import { authInterceptor } from './auth/auth.interceptor'
+} from "@angular/router";
+import { provideStoreDevtools } from "@ngrx/store-devtools";
+import { routes } from "./app.routes";
+import { provideEffects } from "@ngrx/effects";
+import { DatePipe, DecimalPipe } from "@angular/common";
+import { AuthenticationEffects } from "./store/authentication/authentication.effects";
+import { provideHttpClient, withInterceptors } from "@angular/common/http";
+import { FakeBackendProvider } from "./core/helpers/fake-backend";
+import { CalendarEffects } from "./store/calendar/calendar.effects";
+import { KanbanEffects } from "./store/kanban/kanban.effects";
+import { authInterceptor } from "./auth/auth.interceptor";
+import { provideStore } from "@ngrx/store";
 
 // scroll
 const scrollConfig: InMemoryScrollingOptions = {
-  scrollPositionRestoration: 'top',
-  anchorScrolling: 'enabled',
-}
+  scrollPositionRestoration: "top",
+  anchorScrolling: "enabled",
+};
 
 const inMemoryScrollingFeatures: InMemoryScrollingFeature =
-  withInMemoryScrolling(scrollConfig)
+  withInMemoryScrolling(scrollConfig);
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -45,7 +43,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, inMemoryScrollingFeatures),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     provideEffects(CalendarEffects),
-    provideEffects(AuthenticationEffects,KanbanEffects),
-    provideHttpClient(withInterceptors([authInterceptor]))
+    provideEffects(AuthenticationEffects, KanbanEffects),
+    provideHttpClient(withInterceptors([authInterceptor])),
+    provideStore({}),
   ],
-}
+};
