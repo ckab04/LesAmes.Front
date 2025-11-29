@@ -8,7 +8,12 @@ import {
   UntypedFormGroup,
   Validators,
 } from "@angular/forms";
-import { RouterLink } from "@angular/router";
+import {
+  RouterLink,
+  Router,
+  NavigationCancel,
+  NavigationError,
+} from "@angular/router";
 import { Store } from "@ngrx/store";
 
 @Component({
@@ -27,6 +32,8 @@ export class LoginComponent implements OnInit {
   public fb = inject(UntypedFormBuilder);
   public store = inject(Store);
 
+  constructor(private route: Router) {}
+
   ngOnInit(): void {
     this.signInForm = this.fb.group({
       email: ["ton mail ici !", [Validators.required, Validators.email]],
@@ -40,12 +47,17 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.submitted = true;
+    console.log("Is it coming here ??");
+    /*
     if (this.signInForm.valid) {
       const email = this.formValues["email"].value;
       const password = this.formValues["password"].value;
 
       // Login Api
       this.store.dispatch(login({ email: email, password: password }));
-    }
+      } */
+
+    console.log("Logging IN");
+    this.route.navigate(["/starter"]);
   }
 }

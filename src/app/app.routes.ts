@@ -9,6 +9,7 @@ import { BlogsComponent } from "./views/pages/blogs/blogs.component";
 import { ProjectComponent } from "./views/applications/projects/project/project.component";
 import { ClientsComponent } from "./views/applications/projects/clients/clients.component";
 import { LoginComponent } from "./views/auth/login/login.component";
+import { StarterComponent } from "./views/pages/starter/starter.component";
 
 export const routes: Routes = [
   {
@@ -37,6 +38,16 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadChildren: () =>
       import("./views/views.route").then((mod) => mod.VIEW_ROUTES),
+  },
+  {
+    path: "starter", // solution temporaire
+    component: StarterComponent,
+    pathMatch: "full",
+  },
+  {
+    path: "pages",
+    loadChildren: () =>
+      import("./views/pages/pages.route").then((mod) => mod.PAGES_ROUTES),
   },
   {
     path: "auth",
