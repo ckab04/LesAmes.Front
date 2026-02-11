@@ -1,5 +1,5 @@
 import { Client } from '@/app/api/client';
-import { environment } from '@/app/environments/environment';
+import { environment } from '@/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 

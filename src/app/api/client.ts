@@ -22,7 +22,7 @@ export interface IClient {
     /**
      * @return OK
      */
-    ageRangesGET(): Observable<GetAgeRangeOutputTask>;
+    ageRangesGET(): Observable<GetAgeRangeOutput>;
     /**
      * @return OK
      */
@@ -30,83 +30,83 @@ export interface IClient {
     /**
      * @return OK
      */
-    categoriesPOST(body: HobbyCategoryInput): Observable<Task>;
+    categoriesPOST(body: HobbyCategoryInput): Observable<void>;
     /**
      * @return OK
      */
-    categoriesPUT(id: string, body: HobbyCategoryInput): Observable<Task>;
+    categoriesPUT(id: string, body: HobbyCategoryInput): Observable<void>;
     /**
      * @return OK
      */
-    addHobby(id: string, body: HobbyInput): Observable<Task>;
+    addHobby(id: string, body: HobbyInput): Observable<void>;
     /**
      * @return OK
      */
-    hobbiesDELETE(id: string, body: HobbyInput): Observable<Task>;
+    hobbiesDELETE(id: string, body: HobbyInput): Observable<void>;
     /**
      * @return OK
      */
-    hobbiesGET(): Observable<GetImpactFamiliesOutputTask>;
+    hobbiesGET(): Observable<GetImpactFamiliesOutput>;
     /**
      * @return OK
      */
-    impactFamiliesPOST(body: CreateImpactFamilyInput): Observable<Task>;
+    impactFamiliesPOST(body: CreateImpactFamilyInput): Observable<void>;
     /**
      * @return OK
      */
-    impactFamiliesGET(): Observable<GetImpactFamiliesOutputTask>;
+    impactFamiliesGET(): Observable<GetImpactFamiliesOutput>;
     /**
      * @return OK
      */
-    impactFamiliesPUT(id: string, body: UpdateImpactFamilyInput): Observable<Task>;
+    impactFamiliesPUT(id: string, body: UpdateImpactFamilyInput): Observable<void>;
     /**
      * @return OK
      */
-    soulsPOST(body: SoulDto): Observable<Task>;
+    soulsPOST(body: SoulDto): Observable<void>;
     /**
      * @return OK
      */
-    soulsPUT(id: string, body: SoulDto): Observable<Task>;
+    soulsPUT(id: string, body: SoulDto): Observable<void>;
     /**
      * @return OK
      */
-    soulsPATCH(id: string, tutorId: string): Observable<Task>;
+    soulsPATCH(id: string, tutorId: string): Observable<void>;
     /**
      * @return OK
      */
-    register(body: TutorDto): Observable<Task>;
+    register(body: TutorDto): Observable<void>;
     /**
      * @return OK
      */
-    mePOST(body: TutorDto): Observable<Task>;
+    mePOST(body: TutorDto): Observable<void>;
     /**
      * @return OK
      */
-    register2(email: string, password: string): Observable<BooleanTask>;
+    register2(email: string, password: string): Observable<boolean>;
     /**
      * @return OK
      */
-    login(email: string, password: string): Observable<AuthenticatedUserInfoDtoTask>;
+    login(email: string, password: string): Observable<AuthenticatedUserInfoDto>;
     /**
      * @return OK
      */
-    refreshToken(body: RefreshTokenDto): Observable<TokenResponseDtoTask>;
+    refreshToken(body: RefreshTokenDto): Observable<TokenResponseDto>;
     /**
      * @return OK
      */
-    mePUT(body: UpdateUserDto): Observable<void>;
+    mePUT(body: UpdateUserDto): Observable<IdentityResult>;
     /**
      * @return OK
      */
-    updatePassword(body: ChangePasswordDto): Observable<void>;
+    updatePassword(body: ChangePasswordDto): Observable<IdentityResultTask>;
     /**
      * @return OK
      */
-    users(id: string, body: UpdateUserDto): Observable<void>;
+    users(id: string, body: UpdateUserDto): Observable<IdentityResult>;
     /**
      * @return OK
      */
-    rolesGET(): Observable<StringArrayTask>;
+    rolesAll(): Observable<string[]>;
     /**
      * @return OK
      */
@@ -122,11 +122,11 @@ export interface IClient {
     /**
      * @return OK
      */
-    rolesPOST(id: string, body: RoleDto): Observable<void>;
+    rolesPOST(id: string, body: RoleDto): Observable<IdentityResult>;
     /**
      * @return OK
      */
-    rolesDELETE(id: string, role: string): Observable<void>;
+    rolesDELETE(id: string, role: string): Observable<IdentityResult>;
 }
 
 @Injectable()
@@ -180,21 +180,21 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(null as any);
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<void>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
      * @return OK
      */
-    ageRangesGET(): Observable<GetAgeRangeOutputTask> {
+    ageRangesGET(): Observable<GetAgeRangeOutput> {
         let url_ = this.baseUrl + "/age-ranges";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -213,14 +213,14 @@ export class Client implements IClient {
                 try {
                     return this.processAgeRangesGET(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<GetAgeRangeOutputTask>;
+                    return _observableThrow(e) as any as Observable<GetAgeRangeOutput>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<GetAgeRangeOutputTask>;
+                return _observableThrow(response_) as any as Observable<GetAgeRangeOutput>;
         }));
     }
 
-    protected processAgeRangesGET(response: HttpResponseBase): Observable<GetAgeRangeOutputTask> {
+    protected processAgeRangesGET(response: HttpResponseBase): Observable<GetAgeRangeOutput> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -228,18 +228,18 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = GetAgeRangeOutputTask.fromJS(resultData200);
+            result200 = GetAgeRangeOutput.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<GetAgeRangeOutputTask>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
@@ -285,21 +285,21 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(null as any);
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<void>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
      * @return OK
      */
-    categoriesPOST(body: HobbyCategoryInput): Observable<Task> {
+    categoriesPOST(body: HobbyCategoryInput): Observable<void> {
         let url_ = this.baseUrl + "/hobbies/categories";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -311,7 +311,6 @@ export class Client implements IClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
-                "Accept": "application/json"
             })
         };
 
@@ -322,14 +321,14 @@ export class Client implements IClient {
                 try {
                     return this.processCategoriesPOST(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<Task>;
+                    return _observableThrow(e) as any as Observable<void>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<Task>;
+                return _observableThrow(response_) as any as Observable<void>;
         }));
     }
 
-    protected processCategoriesPOST(response: HttpResponseBase): Observable<Task> {
+    protected processCategoriesPOST(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -337,24 +336,21 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Task.fromJS(resultData200);
-            return _observableOf(result200);
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<Task>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
      * @return OK
      */
-    categoriesPUT(id: string, body: HobbyCategoryInput): Observable<Task> {
+    categoriesPUT(id: string, body: HobbyCategoryInput): Observable<void> {
         let url_ = this.baseUrl + "/hobbies/categories/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -369,7 +365,6 @@ export class Client implements IClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
-                "Accept": "application/json"
             })
         };
 
@@ -380,14 +375,14 @@ export class Client implements IClient {
                 try {
                     return this.processCategoriesPUT(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<Task>;
+                    return _observableThrow(e) as any as Observable<void>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<Task>;
+                return _observableThrow(response_) as any as Observable<void>;
         }));
     }
 
-    protected processCategoriesPUT(response: HttpResponseBase): Observable<Task> {
+    protected processCategoriesPUT(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -395,24 +390,21 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Task.fromJS(resultData200);
-            return _observableOf(result200);
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<Task>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
      * @return OK
      */
-    addHobby(id: string, body: HobbyInput): Observable<Task> {
+    addHobby(id: string, body: HobbyInput): Observable<void> {
         let url_ = this.baseUrl + "/hobbies/categories/{id}/add-hobby";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -427,7 +419,6 @@ export class Client implements IClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
-                "Accept": "application/json"
             })
         };
 
@@ -438,14 +429,14 @@ export class Client implements IClient {
                 try {
                     return this.processAddHobby(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<Task>;
+                    return _observableThrow(e) as any as Observable<void>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<Task>;
+                return _observableThrow(response_) as any as Observable<void>;
         }));
     }
 
-    protected processAddHobby(response: HttpResponseBase): Observable<Task> {
+    protected processAddHobby(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -453,24 +444,21 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Task.fromJS(resultData200);
-            return _observableOf(result200);
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<Task>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
      * @return OK
      */
-    hobbiesDELETE(id: string, body: HobbyInput): Observable<Task> {
+    hobbiesDELETE(id: string, body: HobbyInput): Observable<void> {
         let url_ = this.baseUrl + "/hobbies/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -485,7 +473,6 @@ export class Client implements IClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
-                "Accept": "application/json"
             })
         };
 
@@ -496,14 +483,14 @@ export class Client implements IClient {
                 try {
                     return this.processHobbiesDELETE(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<Task>;
+                    return _observableThrow(e) as any as Observable<void>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<Task>;
+                return _observableThrow(response_) as any as Observable<void>;
         }));
     }
 
-    protected processHobbiesDELETE(response: HttpResponseBase): Observable<Task> {
+    protected processHobbiesDELETE(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -511,24 +498,21 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Task.fromJS(resultData200);
-            return _observableOf(result200);
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<Task>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
      * @return OK
      */
-    hobbiesGET(): Observable<GetImpactFamiliesOutputTask> {
+    hobbiesGET(): Observable<GetImpactFamiliesOutput> {
         let url_ = this.baseUrl + "/hobbies";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -547,14 +531,14 @@ export class Client implements IClient {
                 try {
                     return this.processHobbiesGET(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<GetImpactFamiliesOutputTask>;
+                    return _observableThrow(e) as any as Observable<GetImpactFamiliesOutput>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<GetImpactFamiliesOutputTask>;
+                return _observableThrow(response_) as any as Observable<GetImpactFamiliesOutput>;
         }));
     }
 
-    protected processHobbiesGET(response: HttpResponseBase): Observable<GetImpactFamiliesOutputTask> {
+    protected processHobbiesGET(response: HttpResponseBase): Observable<GetImpactFamiliesOutput> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -562,24 +546,24 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = GetImpactFamiliesOutputTask.fromJS(resultData200);
+            result200 = GetImpactFamiliesOutput.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<GetImpactFamiliesOutputTask>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
      * @return OK
      */
-    impactFamiliesPOST(body: CreateImpactFamilyInput): Observable<Task> {
+    impactFamiliesPOST(body: CreateImpactFamilyInput): Observable<void> {
         let url_ = this.baseUrl + "/impact-families";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -591,7 +575,6 @@ export class Client implements IClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
-                "Accept": "application/json"
             })
         };
 
@@ -602,14 +585,14 @@ export class Client implements IClient {
                 try {
                     return this.processImpactFamiliesPOST(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<Task>;
+                    return _observableThrow(e) as any as Observable<void>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<Task>;
+                return _observableThrow(response_) as any as Observable<void>;
         }));
     }
 
-    protected processImpactFamiliesPOST(response: HttpResponseBase): Observable<Task> {
+    protected processImpactFamiliesPOST(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -617,24 +600,21 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Task.fromJS(resultData200);
-            return _observableOf(result200);
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<Task>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
      * @return OK
      */
-    impactFamiliesGET(): Observable<GetImpactFamiliesOutputTask> {
+    impactFamiliesGET(): Observable<GetImpactFamiliesOutput> {
         let url_ = this.baseUrl + "/impact-families";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -653,14 +633,14 @@ export class Client implements IClient {
                 try {
                     return this.processImpactFamiliesGET(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<GetImpactFamiliesOutputTask>;
+                    return _observableThrow(e) as any as Observable<GetImpactFamiliesOutput>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<GetImpactFamiliesOutputTask>;
+                return _observableThrow(response_) as any as Observable<GetImpactFamiliesOutput>;
         }));
     }
 
-    protected processImpactFamiliesGET(response: HttpResponseBase): Observable<GetImpactFamiliesOutputTask> {
+    protected processImpactFamiliesGET(response: HttpResponseBase): Observable<GetImpactFamiliesOutput> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -668,24 +648,24 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = GetImpactFamiliesOutputTask.fromJS(resultData200);
+            result200 = GetImpactFamiliesOutput.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<GetImpactFamiliesOutputTask>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
      * @return OK
      */
-    impactFamiliesPUT(id: string, body: UpdateImpactFamilyInput): Observable<Task> {
+    impactFamiliesPUT(id: string, body: UpdateImpactFamilyInput): Observable<void> {
         let url_ = this.baseUrl + "/impact-families/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -700,7 +680,6 @@ export class Client implements IClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
-                "Accept": "application/json"
             })
         };
 
@@ -711,14 +690,14 @@ export class Client implements IClient {
                 try {
                     return this.processImpactFamiliesPUT(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<Task>;
+                    return _observableThrow(e) as any as Observable<void>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<Task>;
+                return _observableThrow(response_) as any as Observable<void>;
         }));
     }
 
-    protected processImpactFamiliesPUT(response: HttpResponseBase): Observable<Task> {
+    protected processImpactFamiliesPUT(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -726,24 +705,21 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Task.fromJS(resultData200);
-            return _observableOf(result200);
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<Task>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
      * @return OK
      */
-    soulsPOST(body: SoulDto): Observable<Task> {
+    soulsPOST(body: SoulDto): Observable<void> {
         let url_ = this.baseUrl + "/souls";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -755,7 +731,6 @@ export class Client implements IClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
-                "Accept": "application/json"
             })
         };
 
@@ -766,14 +741,14 @@ export class Client implements IClient {
                 try {
                     return this.processSoulsPOST(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<Task>;
+                    return _observableThrow(e) as any as Observable<void>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<Task>;
+                return _observableThrow(response_) as any as Observable<void>;
         }));
     }
 
-    protected processSoulsPOST(response: HttpResponseBase): Observable<Task> {
+    protected processSoulsPOST(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -781,24 +756,21 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Task.fromJS(resultData200);
-            return _observableOf(result200);
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<Task>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
      * @return OK
      */
-    soulsPUT(id: string, body: SoulDto): Observable<Task> {
+    soulsPUT(id: string, body: SoulDto): Observable<void> {
         let url_ = this.baseUrl + "/souls/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -813,7 +785,6 @@ export class Client implements IClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
-                "Accept": "application/json"
             })
         };
 
@@ -824,14 +795,14 @@ export class Client implements IClient {
                 try {
                     return this.processSoulsPUT(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<Task>;
+                    return _observableThrow(e) as any as Observable<void>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<Task>;
+                return _observableThrow(response_) as any as Observable<void>;
         }));
     }
 
-    protected processSoulsPUT(response: HttpResponseBase): Observable<Task> {
+    protected processSoulsPUT(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -839,24 +810,21 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Task.fromJS(resultData200);
-            return _observableOf(result200);
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<Task>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
      * @return OK
      */
-    soulsPATCH(id: string, tutorId: string): Observable<Task> {
+    soulsPATCH(id: string, tutorId: string): Observable<void> {
         let url_ = this.baseUrl + "/souls/{id}?";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -871,7 +839,6 @@ export class Client implements IClient {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Accept": "application/json"
             })
         };
 
@@ -882,14 +849,14 @@ export class Client implements IClient {
                 try {
                     return this.processSoulsPATCH(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<Task>;
+                    return _observableThrow(e) as any as Observable<void>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<Task>;
+                return _observableThrow(response_) as any as Observable<void>;
         }));
     }
 
-    protected processSoulsPATCH(response: HttpResponseBase): Observable<Task> {
+    protected processSoulsPATCH(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -897,24 +864,21 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Task.fromJS(resultData200);
-            return _observableOf(result200);
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<Task>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
      * @return OK
      */
-    register(body: TutorDto): Observable<Task> {
+    register(body: TutorDto): Observable<void> {
         let url_ = this.baseUrl + "/tutors/register";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -926,7 +890,6 @@ export class Client implements IClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
-                "Accept": "application/json"
             })
         };
 
@@ -937,14 +900,14 @@ export class Client implements IClient {
                 try {
                     return this.processRegister(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<Task>;
+                    return _observableThrow(e) as any as Observable<void>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<Task>;
+                return _observableThrow(response_) as any as Observable<void>;
         }));
     }
 
-    protected processRegister(response: HttpResponseBase): Observable<Task> {
+    protected processRegister(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -952,24 +915,21 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Task.fromJS(resultData200);
-            return _observableOf(result200);
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<Task>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
      * @return OK
      */
-    mePOST(body: TutorDto): Observable<Task> {
+    mePOST(body: TutorDto): Observable<void> {
         let url_ = this.baseUrl + "/tutors/update/me";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -981,7 +941,6 @@ export class Client implements IClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
-                "Accept": "application/json"
             })
         };
 
@@ -992,14 +951,14 @@ export class Client implements IClient {
                 try {
                     return this.processMePOST(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<Task>;
+                    return _observableThrow(e) as any as Observable<void>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<Task>;
+                return _observableThrow(response_) as any as Observable<void>;
         }));
     }
 
-    protected processMePOST(response: HttpResponseBase): Observable<Task> {
+    protected processMePOST(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1007,24 +966,21 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Task.fromJS(resultData200);
-            return _observableOf(result200);
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<Task>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
      * @return OK
      */
-    register2(email: string, password: string): Observable<BooleanTask> {
+    register2(email: string, password: string): Observable<boolean> {
         let url_ = this.baseUrl + "/users/register?";
         if (email === undefined || email === null)
             throw new globalThis.Error("The parameter 'email' must be defined and cannot be null.");
@@ -1051,14 +1007,14 @@ export class Client implements IClient {
                 try {
                     return this.processRegister2(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<BooleanTask>;
+                    return _observableThrow(e) as any as Observable<boolean>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<BooleanTask>;
+                return _observableThrow(response_) as any as Observable<boolean>;
         }));
     }
 
-    protected processRegister2(response: HttpResponseBase): Observable<BooleanTask> {
+    protected processRegister2(response: HttpResponseBase): Observable<boolean> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1066,24 +1022,25 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = BooleanTask.fromJS(resultData200);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<BooleanTask>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
      * @return OK
      */
-    login(email: string, password: string): Observable<AuthenticatedUserInfoDtoTask> {
+    login(email: string, password: string): Observable<AuthenticatedUserInfoDto> {
         let url_ = this.baseUrl + "/users/login?";
         if (email === undefined || email === null)
             throw new globalThis.Error("The parameter 'email' must be defined and cannot be null.");
@@ -1110,14 +1067,14 @@ export class Client implements IClient {
                 try {
                     return this.processLogin(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<AuthenticatedUserInfoDtoTask>;
+                    return _observableThrow(e) as any as Observable<AuthenticatedUserInfoDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<AuthenticatedUserInfoDtoTask>;
+                return _observableThrow(response_) as any as Observable<AuthenticatedUserInfoDto>;
         }));
     }
 
-    protected processLogin(response: HttpResponseBase): Observable<AuthenticatedUserInfoDtoTask> {
+    protected processLogin(response: HttpResponseBase): Observable<AuthenticatedUserInfoDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1125,24 +1082,24 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = AuthenticatedUserInfoDtoTask.fromJS(resultData200);
+            result200 = AuthenticatedUserInfoDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<AuthenticatedUserInfoDtoTask>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
      * @return OK
      */
-    refreshToken(body: RefreshTokenDto): Observable<TokenResponseDtoTask> {
+    refreshToken(body: RefreshTokenDto): Observable<TokenResponseDto> {
         let url_ = this.baseUrl + "/users/refresh-token";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1165,14 +1122,14 @@ export class Client implements IClient {
                 try {
                     return this.processRefreshToken(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<TokenResponseDtoTask>;
+                    return _observableThrow(e) as any as Observable<TokenResponseDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<TokenResponseDtoTask>;
+                return _observableThrow(response_) as any as Observable<TokenResponseDto>;
         }));
     }
 
-    protected processRefreshToken(response: HttpResponseBase): Observable<TokenResponseDtoTask> {
+    protected processRefreshToken(response: HttpResponseBase): Observable<TokenResponseDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1180,24 +1137,24 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = TokenResponseDtoTask.fromJS(resultData200);
+            result200 = TokenResponseDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<TokenResponseDtoTask>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
      * @return OK
      */
-    mePUT(body: UpdateUserDto): Observable<void> {
+    mePUT(body: UpdateUserDto): Observable<IdentityResult> {
         let url_ = this.baseUrl + "/users/me";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1209,6 +1166,7 @@ export class Client implements IClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             })
         };
 
@@ -1219,14 +1177,14 @@ export class Client implements IClient {
                 try {
                     return this.processMePUT(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<void>;
+                    return _observableThrow(e) as any as Observable<IdentityResult>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<void>;
+                return _observableThrow(response_) as any as Observable<IdentityResult>;
         }));
     }
 
-    protected processMePUT(response: HttpResponseBase): Observable<void> {
+    protected processMePUT(response: HttpResponseBase): Observable<IdentityResult> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1234,21 +1192,24 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(null as any);
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = IdentityResult.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<void>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
      * @return OK
      */
-    updatePassword(body: ChangePasswordDto): Observable<void> {
+    updatePassword(body: ChangePasswordDto): Observable<IdentityResultTask> {
         let url_ = this.baseUrl + "/users/me/update-password";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1260,6 +1221,7 @@ export class Client implements IClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             })
         };
 
@@ -1270,14 +1232,14 @@ export class Client implements IClient {
                 try {
                     return this.processUpdatePassword(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<void>;
+                    return _observableThrow(e) as any as Observable<IdentityResultTask>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<void>;
+                return _observableThrow(response_) as any as Observable<IdentityResultTask>;
         }));
     }
 
-    protected processUpdatePassword(response: HttpResponseBase): Observable<void> {
+    protected processUpdatePassword(response: HttpResponseBase): Observable<IdentityResultTask> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1285,21 +1247,24 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(null as any);
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = IdentityResultTask.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<void>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
      * @return OK
      */
-    users(id: string, body: UpdateUserDto): Observable<void> {
+    users(id: string, body: UpdateUserDto): Observable<IdentityResult> {
         let url_ = this.baseUrl + "/users/users/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -1314,6 +1279,7 @@ export class Client implements IClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             })
         };
 
@@ -1324,14 +1290,14 @@ export class Client implements IClient {
                 try {
                     return this.processUsers(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<void>;
+                    return _observableThrow(e) as any as Observable<IdentityResult>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<void>;
+                return _observableThrow(response_) as any as Observable<IdentityResult>;
         }));
     }
 
-    protected processUsers(response: HttpResponseBase): Observable<void> {
+    protected processUsers(response: HttpResponseBase): Observable<IdentityResult> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1339,21 +1305,24 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(null as any);
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = IdentityResult.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<void>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
      * @return OK
      */
-    rolesGET(): Observable<StringArrayTask> {
+    rolesAll(): Observable<string[]> {
         let url_ = this.baseUrl + "/users/roles";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1366,20 +1335,20 @@ export class Client implements IClient {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processRolesGET(response_);
+            return this.processRolesAll(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processRolesGET(response_ as any);
+                    return this.processRolesAll(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<StringArrayTask>;
+                    return _observableThrow(e) as any as Observable<string[]>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<StringArrayTask>;
+                return _observableThrow(response_) as any as Observable<string[]>;
         }));
     }
 
-    protected processRolesGET(response: HttpResponseBase): Observable<StringArrayTask> {
+    protected processRolesAll(response: HttpResponseBase): Observable<string[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1387,18 +1356,25 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = StringArrayTask.fromJS(resultData200);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(item);
+            }
+            else {
+                result200 = null as any;
+            }
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<StringArrayTask>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
@@ -1444,15 +1420,15 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(null as any);
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<void>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
@@ -1494,15 +1470,15 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(null as any);
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<void>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
@@ -1544,21 +1520,21 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(null as any);
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<void>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
      * @return OK
      */
-    rolesPOST(id: string, body: RoleDto): Observable<void> {
+    rolesPOST(id: string, body: RoleDto): Observable<IdentityResult> {
         let url_ = this.baseUrl + "/users/users/{id}/roles";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -1573,6 +1549,7 @@ export class Client implements IClient {
             responseType: "blob",
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             })
         };
 
@@ -1583,14 +1560,14 @@ export class Client implements IClient {
                 try {
                     return this.processRolesPOST(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<void>;
+                    return _observableThrow(e) as any as Observable<IdentityResult>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<void>;
+                return _observableThrow(response_) as any as Observable<IdentityResult>;
         }));
     }
 
-    protected processRolesPOST(response: HttpResponseBase): Observable<void> {
+    protected processRolesPOST(response: HttpResponseBase): Observable<IdentityResult> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1598,21 +1575,24 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(null as any);
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = IdentityResult.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<void>(null as any);
+        return _observableOf(null as any);
     }
 
     /**
      * @return OK
      */
-    rolesDELETE(id: string, role: string): Observable<void> {
+    rolesDELETE(id: string, role: string): Observable<IdentityResult> {
         let url_ = this.baseUrl + "/users/users/{id}/roles/{role}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -1626,6 +1606,7 @@ export class Client implements IClient {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Accept": "application/json"
             })
         };
 
@@ -1636,14 +1617,14 @@ export class Client implements IClient {
                 try {
                     return this.processRolesDELETE(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<void>;
+                    return _observableThrow(e) as any as Observable<IdentityResult>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<void>;
+                return _observableThrow(response_) as any as Observable<IdentityResult>;
         }));
     }
 
-    protected processRolesDELETE(response: HttpResponseBase): Observable<void> {
+    protected processRolesDELETE(response: HttpResponseBase): Observable<IdentityResult> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1651,15 +1632,18 @@ export class Client implements IClient {
 
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-            return _observableOf<void>(null as any);
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = IdentityResult.fromJS(resultData200);
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<void>(null as any);
+        return _observableOf(null as any);
     }
 }
 
@@ -2017,150 +2001,6 @@ export interface IAuthenticatedUserInfoDto {
     firstName?: string | undefined;
     lastName?: string | undefined;
     tokensInfo?: TokenResponseDto;
-}
-
-export class AuthenticatedUserInfoDtoTask implements IAuthenticatedUserInfoDtoTask {
-    readonly id?: number;
-    exception?: AggregateException;
-    status?: TaskStatus;
-    readonly isCanceled?: boolean;
-    readonly isCompleted?: boolean;
-    readonly isCompletedSuccessfully?: boolean;
-    creationOptions?: TaskCreationOptions;
-    readonly asyncState?: any | undefined;
-    readonly isFaulted?: boolean;
-    result?: AuthenticatedUserInfoDto;
-
-    constructor(data?: IAuthenticatedUserInfoDtoTask) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (this as any).id = _data["id"];
-            this.exception = _data["exception"] ? AggregateException.fromJS(_data["exception"]) : undefined as any;
-            this.status = _data["status"];
-            (this as any).isCanceled = _data["isCanceled"];
-            (this as any).isCompleted = _data["isCompleted"];
-            (this as any).isCompletedSuccessfully = _data["isCompletedSuccessfully"];
-            this.creationOptions = _data["creationOptions"];
-            (this as any).asyncState = _data["asyncState"];
-            (this as any).isFaulted = _data["isFaulted"];
-            this.result = _data["result"] ? AuthenticatedUserInfoDto.fromJS(_data["result"]) : undefined as any;
-        }
-    }
-
-    static fromJS(data: any): AuthenticatedUserInfoDtoTask {
-        data = typeof data === 'object' ? data : {};
-        let result = new AuthenticatedUserInfoDtoTask();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["exception"] = this.exception ? this.exception.toJSON() : undefined as any;
-        data["status"] = this.status;
-        data["isCanceled"] = this.isCanceled;
-        data["isCompleted"] = this.isCompleted;
-        data["isCompletedSuccessfully"] = this.isCompletedSuccessfully;
-        data["creationOptions"] = this.creationOptions;
-        data["asyncState"] = this.asyncState;
-        data["isFaulted"] = this.isFaulted;
-        data["result"] = this.result ? this.result.toJSON() : undefined as any;
-        return data;
-    }
-}
-
-export interface IAuthenticatedUserInfoDtoTask {
-    id?: number;
-    exception?: AggregateException;
-    status?: TaskStatus;
-    isCanceled?: boolean;
-    isCompleted?: boolean;
-    isCompletedSuccessfully?: boolean;
-    creationOptions?: TaskCreationOptions;
-    asyncState?: any | undefined;
-    isFaulted?: boolean;
-    result?: AuthenticatedUserInfoDto;
-}
-
-export class BooleanTask implements IBooleanTask {
-    readonly id?: number;
-    exception?: AggregateException;
-    status?: TaskStatus;
-    readonly isCanceled?: boolean;
-    readonly isCompleted?: boolean;
-    readonly isCompletedSuccessfully?: boolean;
-    creationOptions?: TaskCreationOptions;
-    readonly asyncState?: any | undefined;
-    readonly isFaulted?: boolean;
-    readonly result?: boolean;
-
-    constructor(data?: IBooleanTask) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (this as any).id = _data["id"];
-            this.exception = _data["exception"] ? AggregateException.fromJS(_data["exception"]) : undefined as any;
-            this.status = _data["status"];
-            (this as any).isCanceled = _data["isCanceled"];
-            (this as any).isCompleted = _data["isCompleted"];
-            (this as any).isCompletedSuccessfully = _data["isCompletedSuccessfully"];
-            this.creationOptions = _data["creationOptions"];
-            (this as any).asyncState = _data["asyncState"];
-            (this as any).isFaulted = _data["isFaulted"];
-            (this as any).result = _data["result"];
-        }
-    }
-
-    static fromJS(data: any): BooleanTask {
-        data = typeof data === 'object' ? data : {};
-        let result = new BooleanTask();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["exception"] = this.exception ? this.exception.toJSON() : undefined as any;
-        data["status"] = this.status;
-        data["isCanceled"] = this.isCanceled;
-        data["isCompleted"] = this.isCompleted;
-        data["isCompletedSuccessfully"] = this.isCompletedSuccessfully;
-        data["creationOptions"] = this.creationOptions;
-        data["asyncState"] = this.asyncState;
-        data["isFaulted"] = this.isFaulted;
-        data["result"] = this.result;
-        return data;
-    }
-}
-
-export interface IBooleanTask {
-    id?: number;
-    exception?: AggregateException;
-    status?: TaskStatus;
-    isCanceled?: boolean;
-    isCompleted?: boolean;
-    isCompletedSuccessfully?: boolean;
-    creationOptions?: TaskCreationOptions;
-    asyncState?: any | undefined;
-    isFaulted?: boolean;
-    result?: boolean;
 }
 
 export enum CallingConventions {
@@ -2983,78 +2823,6 @@ export interface IGetAgeRangeOutput {
     ageRanges?: AgeRangeDto[] | undefined;
 }
 
-export class GetAgeRangeOutputTask implements IGetAgeRangeOutputTask {
-    readonly id?: number;
-    exception?: AggregateException;
-    status?: TaskStatus;
-    readonly isCanceled?: boolean;
-    readonly isCompleted?: boolean;
-    readonly isCompletedSuccessfully?: boolean;
-    creationOptions?: TaskCreationOptions;
-    readonly asyncState?: any | undefined;
-    readonly isFaulted?: boolean;
-    result?: GetAgeRangeOutput;
-
-    constructor(data?: IGetAgeRangeOutputTask) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (this as any).id = _data["id"];
-            this.exception = _data["exception"] ? AggregateException.fromJS(_data["exception"]) : undefined as any;
-            this.status = _data["status"];
-            (this as any).isCanceled = _data["isCanceled"];
-            (this as any).isCompleted = _data["isCompleted"];
-            (this as any).isCompletedSuccessfully = _data["isCompletedSuccessfully"];
-            this.creationOptions = _data["creationOptions"];
-            (this as any).asyncState = _data["asyncState"];
-            (this as any).isFaulted = _data["isFaulted"];
-            this.result = _data["result"] ? GetAgeRangeOutput.fromJS(_data["result"]) : undefined as any;
-        }
-    }
-
-    static fromJS(data: any): GetAgeRangeOutputTask {
-        data = typeof data === 'object' ? data : {};
-        let result = new GetAgeRangeOutputTask();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["exception"] = this.exception ? this.exception.toJSON() : undefined as any;
-        data["status"] = this.status;
-        data["isCanceled"] = this.isCanceled;
-        data["isCompleted"] = this.isCompleted;
-        data["isCompletedSuccessfully"] = this.isCompletedSuccessfully;
-        data["creationOptions"] = this.creationOptions;
-        data["asyncState"] = this.asyncState;
-        data["isFaulted"] = this.isFaulted;
-        data["result"] = this.result ? this.result.toJSON() : undefined as any;
-        return data;
-    }
-}
-
-export interface IGetAgeRangeOutputTask {
-    id?: number;
-    exception?: AggregateException;
-    status?: TaskStatus;
-    isCanceled?: boolean;
-    isCompleted?: boolean;
-    isCompletedSuccessfully?: boolean;
-    creationOptions?: TaskCreationOptions;
-    asyncState?: any | undefined;
-    isFaulted?: boolean;
-    result?: GetAgeRangeOutput;
-}
-
 export class GetImpactFamiliesOutput implements IGetImpactFamiliesOutput {
     impactFamilies?: ImpactFamilyDto[] | undefined;
 
@@ -3097,78 +2865,6 @@ export class GetImpactFamiliesOutput implements IGetImpactFamiliesOutput {
 
 export interface IGetImpactFamiliesOutput {
     impactFamilies?: ImpactFamilyDto[] | undefined;
-}
-
-export class GetImpactFamiliesOutputTask implements IGetImpactFamiliesOutputTask {
-    readonly id?: number;
-    exception?: AggregateException;
-    status?: TaskStatus;
-    readonly isCanceled?: boolean;
-    readonly isCompleted?: boolean;
-    readonly isCompletedSuccessfully?: boolean;
-    creationOptions?: TaskCreationOptions;
-    readonly asyncState?: any | undefined;
-    readonly isFaulted?: boolean;
-    result?: GetImpactFamiliesOutput;
-
-    constructor(data?: IGetImpactFamiliesOutputTask) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (this as any).id = _data["id"];
-            this.exception = _data["exception"] ? AggregateException.fromJS(_data["exception"]) : undefined as any;
-            this.status = _data["status"];
-            (this as any).isCanceled = _data["isCanceled"];
-            (this as any).isCompleted = _data["isCompleted"];
-            (this as any).isCompletedSuccessfully = _data["isCompletedSuccessfully"];
-            this.creationOptions = _data["creationOptions"];
-            (this as any).asyncState = _data["asyncState"];
-            (this as any).isFaulted = _data["isFaulted"];
-            this.result = _data["result"] ? GetImpactFamiliesOutput.fromJS(_data["result"]) : undefined as any;
-        }
-    }
-
-    static fromJS(data: any): GetImpactFamiliesOutputTask {
-        data = typeof data === 'object' ? data : {};
-        let result = new GetImpactFamiliesOutputTask();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["exception"] = this.exception ? this.exception.toJSON() : undefined as any;
-        data["status"] = this.status;
-        data["isCanceled"] = this.isCanceled;
-        data["isCompleted"] = this.isCompleted;
-        data["isCompletedSuccessfully"] = this.isCompletedSuccessfully;
-        data["creationOptions"] = this.creationOptions;
-        data["asyncState"] = this.asyncState;
-        data["isFaulted"] = this.isFaulted;
-        data["result"] = this.result ? this.result.toJSON() : undefined as any;
-        return data;
-    }
-}
-
-export interface IGetImpactFamiliesOutputTask {
-    id?: number;
-    exception?: AggregateException;
-    status?: TaskStatus;
-    isCanceled?: boolean;
-    isCompleted?: boolean;
-    isCompletedSuccessfully?: boolean;
-    creationOptions?: TaskCreationOptions;
-    asyncState?: any | undefined;
-    isFaulted?: boolean;
-    result?: GetImpactFamiliesOutput;
 }
 
 export class HobbyCategoryInput implements IHobbyCategoryInput {
@@ -3275,6 +2971,166 @@ export class ICustomAttributeProvider implements IICustomAttributeProvider {
 }
 
 export interface IICustomAttributeProvider {
+}
+
+export class IdentityError implements IIdentityError {
+    code?: string | undefined;
+    description?: string | undefined;
+
+    constructor(data?: IIdentityError) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.code = _data["code"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any): IdentityError {
+        data = typeof data === 'object' ? data : {};
+        let result = new IdentityError();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["code"] = this.code;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+export interface IIdentityError {
+    code?: string | undefined;
+    description?: string | undefined;
+}
+
+export class IdentityResult implements IIdentityResult {
+    readonly succeeded?: boolean;
+    readonly errors?: IdentityError[] | undefined;
+
+    constructor(data?: IIdentityResult) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (this as any).succeeded = _data["succeeded"];
+            if (Array.isArray(_data["errors"])) {
+                (this as any).errors = [] as any;
+                for (let item of _data["errors"])
+                    (this as any).errors!.push(IdentityError.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): IdentityResult {
+        data = typeof data === 'object' ? data : {};
+        let result = new IdentityResult();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["succeeded"] = this.succeeded;
+        if (Array.isArray(this.errors)) {
+            data["errors"] = [];
+            for (let item of this.errors)
+                data["errors"].push(item ? item.toJSON() : undefined as any);
+        }
+        return data;
+    }
+}
+
+export interface IIdentityResult {
+    succeeded?: boolean;
+    errors?: IdentityError[] | undefined;
+}
+
+export class IdentityResultTask implements IIdentityResultTask {
+    readonly id?: number;
+    exception?: AggregateException;
+    status?: TaskStatus;
+    readonly isCanceled?: boolean;
+    readonly isCompleted?: boolean;
+    readonly isCompletedSuccessfully?: boolean;
+    creationOptions?: TaskCreationOptions;
+    readonly asyncState?: any | undefined;
+    readonly isFaulted?: boolean;
+    result?: IdentityResult;
+
+    constructor(data?: IIdentityResultTask) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (this as any).id = _data["id"];
+            this.exception = _data["exception"] ? AggregateException.fromJS(_data["exception"]) : undefined as any;
+            this.status = _data["status"];
+            (this as any).isCanceled = _data["isCanceled"];
+            (this as any).isCompleted = _data["isCompleted"];
+            (this as any).isCompletedSuccessfully = _data["isCompletedSuccessfully"];
+            this.creationOptions = _data["creationOptions"];
+            (this as any).asyncState = _data["asyncState"];
+            (this as any).isFaulted = _data["isFaulted"];
+            this.result = _data["result"] ? IdentityResult.fromJS(_data["result"]) : undefined as any;
+        }
+    }
+
+    static fromJS(data: any): IdentityResultTask {
+        data = typeof data === 'object' ? data : {};
+        let result = new IdentityResultTask();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["exception"] = this.exception ? this.exception.toJSON() : undefined as any;
+        data["status"] = this.status;
+        data["isCanceled"] = this.isCanceled;
+        data["isCompleted"] = this.isCompleted;
+        data["isCompletedSuccessfully"] = this.isCompletedSuccessfully;
+        data["creationOptions"] = this.creationOptions;
+        data["asyncState"] = this.asyncState;
+        data["isFaulted"] = this.isFaulted;
+        data["result"] = this.result ? this.result.toJSON() : undefined as any;
+        return data;
+    }
+}
+
+export interface IIdentityResultTask {
+    id?: number;
+    exception?: AggregateException;
+    status?: TaskStatus;
+    isCanceled?: boolean;
+    isCompleted?: boolean;
+    isCompletedSuccessfully?: boolean;
+    creationOptions?: TaskCreationOptions;
+    asyncState?: any | undefined;
+    isFaulted?: boolean;
+    result?: IdentityResult;
 }
 
 export class ImpactFamilyDto implements IImpactFamilyDto {
@@ -4456,86 +4312,6 @@ export interface ISoulDto {
     hobbiesIds?: number[] | undefined;
 }
 
-export class StringArrayTask implements IStringArrayTask {
-    readonly id?: number;
-    exception?: AggregateException;
-    status?: TaskStatus;
-    readonly isCanceled?: boolean;
-    readonly isCompleted?: boolean;
-    readonly isCompletedSuccessfully?: boolean;
-    creationOptions?: TaskCreationOptions;
-    readonly asyncState?: any | undefined;
-    readonly isFaulted?: boolean;
-    readonly result?: string[] | undefined;
-
-    constructor(data?: IStringArrayTask) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (this as any).id = _data["id"];
-            this.exception = _data["exception"] ? AggregateException.fromJS(_data["exception"]) : undefined as any;
-            this.status = _data["status"];
-            (this as any).isCanceled = _data["isCanceled"];
-            (this as any).isCompleted = _data["isCompleted"];
-            (this as any).isCompletedSuccessfully = _data["isCompletedSuccessfully"];
-            this.creationOptions = _data["creationOptions"];
-            (this as any).asyncState = _data["asyncState"];
-            (this as any).isFaulted = _data["isFaulted"];
-            if (Array.isArray(_data["result"])) {
-                (this as any).result = [] as any;
-                for (let item of _data["result"])
-                    (this as any).result!.push(item);
-            }
-        }
-    }
-
-    static fromJS(data: any): StringArrayTask {
-        data = typeof data === 'object' ? data : {};
-        let result = new StringArrayTask();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["exception"] = this.exception ? this.exception.toJSON() : undefined as any;
-        data["status"] = this.status;
-        data["isCanceled"] = this.isCanceled;
-        data["isCompleted"] = this.isCompleted;
-        data["isCompletedSuccessfully"] = this.isCompletedSuccessfully;
-        data["creationOptions"] = this.creationOptions;
-        data["asyncState"] = this.asyncState;
-        data["isFaulted"] = this.isFaulted;
-        if (Array.isArray(this.result)) {
-            data["result"] = [];
-            for (let item of this.result)
-                data["result"].push(item);
-        }
-        return data;
-    }
-}
-
-export interface IStringArrayTask {
-    id?: number;
-    exception?: AggregateException;
-    status?: TaskStatus;
-    isCanceled?: boolean;
-    isCompleted?: boolean;
-    isCompletedSuccessfully?: boolean;
-    creationOptions?: TaskCreationOptions;
-    asyncState?: any | undefined;
-    isFaulted?: boolean;
-    result?: string[] | undefined;
-}
-
 export class StructLayoutAttribute implements IStructLayoutAttribute {
     readonly typeId?: any | undefined;
     value?: LayoutKind;
@@ -4574,74 +4350,6 @@ export class StructLayoutAttribute implements IStructLayoutAttribute {
 export interface IStructLayoutAttribute {
     typeId?: any | undefined;
     value?: LayoutKind;
-}
-
-export class Task implements ITask {
-    readonly id?: number;
-    exception?: AggregateException;
-    status?: TaskStatus;
-    readonly isCanceled?: boolean;
-    readonly isCompleted?: boolean;
-    readonly isCompletedSuccessfully?: boolean;
-    creationOptions?: TaskCreationOptions;
-    readonly asyncState?: any | undefined;
-    readonly isFaulted?: boolean;
-
-    constructor(data?: ITask) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (this as any).id = _data["id"];
-            this.exception = _data["exception"] ? AggregateException.fromJS(_data["exception"]) : undefined as any;
-            this.status = _data["status"];
-            (this as any).isCanceled = _data["isCanceled"];
-            (this as any).isCompleted = _data["isCompleted"];
-            (this as any).isCompletedSuccessfully = _data["isCompletedSuccessfully"];
-            this.creationOptions = _data["creationOptions"];
-            (this as any).asyncState = _data["asyncState"];
-            (this as any).isFaulted = _data["isFaulted"];
-        }
-    }
-
-    static fromJS(data: any): Task {
-        data = typeof data === 'object' ? data : {};
-        let result = new Task();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["exception"] = this.exception ? this.exception.toJSON() : undefined as any;
-        data["status"] = this.status;
-        data["isCanceled"] = this.isCanceled;
-        data["isCompleted"] = this.isCompleted;
-        data["isCompletedSuccessfully"] = this.isCompletedSuccessfully;
-        data["creationOptions"] = this.creationOptions;
-        data["asyncState"] = this.asyncState;
-        data["isFaulted"] = this.isFaulted;
-        return data;
-    }
-}
-
-export interface ITask {
-    id?: number;
-    exception?: AggregateException;
-    status?: TaskStatus;
-    isCanceled?: boolean;
-    isCompleted?: boolean;
-    isCompletedSuccessfully?: boolean;
-    creationOptions?: TaskCreationOptions;
-    asyncState?: any | undefined;
-    isFaulted?: boolean;
 }
 
 export enum TaskCreationOptions {
@@ -4717,85 +4425,14 @@ export interface ITokenResponseDto {
     roles?: string[] | undefined;
 }
 
-export class TokenResponseDtoTask implements ITokenResponseDtoTask {
-    readonly id?: number;
-    exception?: AggregateException;
-    status?: TaskStatus;
-    readonly isCanceled?: boolean;
-    readonly isCompleted?: boolean;
-    readonly isCompletedSuccessfully?: boolean;
-    creationOptions?: TaskCreationOptions;
-    readonly asyncState?: any | undefined;
-    readonly isFaulted?: boolean;
-    result?: TokenResponseDto;
-
-    constructor(data?: ITokenResponseDtoTask) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (this as any).id = _data["id"];
-            this.exception = _data["exception"] ? AggregateException.fromJS(_data["exception"]) : undefined as any;
-            this.status = _data["status"];
-            (this as any).isCanceled = _data["isCanceled"];
-            (this as any).isCompleted = _data["isCompleted"];
-            (this as any).isCompletedSuccessfully = _data["isCompletedSuccessfully"];
-            this.creationOptions = _data["creationOptions"];
-            (this as any).asyncState = _data["asyncState"];
-            (this as any).isFaulted = _data["isFaulted"];
-            this.result = _data["result"] ? TokenResponseDto.fromJS(_data["result"]) : undefined as any;
-        }
-    }
-
-    static fromJS(data: any): TokenResponseDtoTask {
-        data = typeof data === 'object' ? data : {};
-        let result = new TokenResponseDtoTask();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["exception"] = this.exception ? this.exception.toJSON() : undefined as any;
-        data["status"] = this.status;
-        data["isCanceled"] = this.isCanceled;
-        data["isCompleted"] = this.isCompleted;
-        data["isCompletedSuccessfully"] = this.isCompletedSuccessfully;
-        data["creationOptions"] = this.creationOptions;
-        data["asyncState"] = this.asyncState;
-        data["isFaulted"] = this.isFaulted;
-        data["result"] = this.result ? this.result.toJSON() : undefined as any;
-        return data;
-    }
-}
-
-export interface ITokenResponseDtoTask {
-    id?: number;
-    exception?: AggregateException;
-    status?: TaskStatus;
-    isCanceled?: boolean;
-    isCompleted?: boolean;
-    isCompletedSuccessfully?: boolean;
-    creationOptions?: TaskCreationOptions;
-    asyncState?: any | undefined;
-    isFaulted?: boolean;
-    result?: TokenResponseDto;
-}
-
 export class TutorDto implements ITutorDto {
+    ageRangeId?: string | undefined;
     firstName?: string | undefined;
     lastName?: string | undefined;
     email?: string | undefined;
     phoneNumber?: string | undefined;
-    birthYear?: number;
     hobbiesIds?: string[] | undefined;
+    menteeAgeRangesIds?: string[] | undefined;
 
     constructor(data?: ITutorDto) {
         if (data) {
@@ -4808,15 +4445,20 @@ export class TutorDto implements ITutorDto {
 
     init(_data?: any) {
         if (_data) {
+            this.ageRangeId = _data["ageRangeId"];
             this.firstName = _data["firstName"];
             this.lastName = _data["lastName"];
             this.email = _data["email"];
             this.phoneNumber = _data["phoneNumber"];
-            this.birthYear = _data["birthYear"];
             if (Array.isArray(_data["hobbiesIds"])) {
                 this.hobbiesIds = [] as any;
                 for (let item of _data["hobbiesIds"])
                     this.hobbiesIds!.push(item);
+            }
+            if (Array.isArray(_data["menteeAgeRangesIds"])) {
+                this.menteeAgeRangesIds = [] as any;
+                for (let item of _data["menteeAgeRangesIds"])
+                    this.menteeAgeRangesIds!.push(item);
             }
         }
     }
@@ -4830,27 +4472,33 @@ export class TutorDto implements ITutorDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["ageRangeId"] = this.ageRangeId;
         data["firstName"] = this.firstName;
         data["lastName"] = this.lastName;
         data["email"] = this.email;
         data["phoneNumber"] = this.phoneNumber;
-        data["birthYear"] = this.birthYear;
         if (Array.isArray(this.hobbiesIds)) {
             data["hobbiesIds"] = [];
             for (let item of this.hobbiesIds)
                 data["hobbiesIds"].push(item);
+        }
+        if (Array.isArray(this.menteeAgeRangesIds)) {
+            data["menteeAgeRangesIds"] = [];
+            for (let item of this.menteeAgeRangesIds)
+                data["menteeAgeRangesIds"].push(item);
         }
         return data;
     }
 }
 
 export interface ITutorDto {
+    ageRangeId?: string | undefined;
     firstName?: string | undefined;
     lastName?: string | undefined;
     email?: string | undefined;
     phoneNumber?: string | undefined;
-    birthYear?: number;
     hobbiesIds?: string[] | undefined;
+    menteeAgeRangesIds?: string[] | undefined;
 }
 
 export class Type implements IType {

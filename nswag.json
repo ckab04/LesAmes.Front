@@ -3,7 +3,7 @@
   "defaultVariables": null,
   "documentGenerator": {
     "fromDocument": {
-      "url": "http://194.164.60.134:8083/swagger/v1/swagger.json",
+      "url": "http://127.0.0.1:32771/swagger/v1/swagger.json",
       "output": null,
       "newLineBehavior": "Auto"
     }
@@ -20,7 +20,7 @@
       "withCredentials": false,
       "useSingletonProvider": false,
       "injectionTokenType": "InjectionToken",
-      "rxJsVersion": 6.0,
+      "rxJsVersion": 7,
       "dateTimeType": "Date",
       "nullValue": "Undefined",
       "generateClientClasses": true,

@@ -1,10 +1,10 @@
 import { inject } from '@angular/core';
 import { HttpInterceptorFn, HttpRequest, HttpHandlerFn, HttpErrorResponse } from '@angular/common/http';
 import { AuthenticationService } from '../core/service/auth.service';
-import { environment } from '../environments/environment';
 import { WebApiService } from '../core/service/web-api-service.service';
-import { RefreshTokenDto, TokenResponseDto, TokenResponseDtoTask } from '../api/client';
+import { RefreshTokenDto, TokenResponseDto } from '../api/client';
 import { throwError, switchMap, catchError } from 'rxjs';
+import { environment } from '@/environments/environment';
 
 export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: HttpHandlerFn) => {
 
@@ -26,8 +26,8 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: 
                 // Call ton endpoint de refresh (ex: POST /auth/refresh)
                 // Ici, on utilise fetch pour éviter la récursion de l’interceptor
                 return webApiService.getService().refreshToken({ refreshToken: auth.refreshToken } as RefreshTokenDto).pipe(
-                    switchMap((data: TokenResponseDtoTask) => {
-                        auth.setSession(data.result?.accessToken ?? '', data.result?.refreshToken ?? auth.refreshToken ?? '', data.result?.roles ?? []);
+                    switchMap((data: TokenResponseDto) => {
+                        auth.setSession(data.accessToken ?? '', data.refreshToken ?? auth.refreshToken ?? '', data.roles ?? []);
                         const retried = cloned.clone({
                             setHeaders: { Authorization: `Bearer ${auth.token}` }
                         });

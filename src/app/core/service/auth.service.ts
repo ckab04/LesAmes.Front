@@ -2,8 +2,8 @@ import { Injectable, inject } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { map } from 'rxjs/operators'
 import { WebApiService } from './web-api-service.service'
-import { AuthenticatedUserInfoDtoTask, TokenResponseDtoTask } from '@/app/api/client'
 import { User } from '../helpers/fake-backend'
+import { AuthenticatedUserInfoDto } from '@/app/api/client'
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
@@ -51,13 +51,13 @@ export class AuthenticationService {
 
   login(email: string, password: string) {
     return this.webApiService.getService().login(email, password).pipe(
-      map((response: AuthenticatedUserInfoDtoTask) => {
+      map((response: AuthenticatedUserInfoDto) => {
         // login successful if there's a jwt token in the response
-        if (response.result && response.result?.tokensInfo?.accessToken) {
+        if (response && response?.tokensInfo?.accessToken) {
           // store user details and jwt in session
-          this.setSession(response.result?.tokensInfo.accessToken, response.result?.tokensInfo.refreshToken ?? '', response.result?.tokensInfo.roles ?? []);
+          this.setSession(response.tokensInfo.accessToken, response.tokensInfo.refreshToken ?? '', response.tokensInfo.roles ?? []);
         }
-        return { firstName: response.result?.firstName, lastName: response.result?.lastName, name: `${response.result?.firstName} ${response.result?.lastName}`  } as User;
+        return { firstName: response.firstName, lastName: response.lastName, name: `${response.firstName} ${response.lastName}`  } as User;
       })
     )
   }

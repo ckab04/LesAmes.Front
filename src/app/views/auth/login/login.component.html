@@ -74,13 +74,13 @@
                     <div class="col-12">
                       <div class="d-grid mt-3">
                         <button class="btn btn-primary" type="submit" [disabled]="loading">
-                          <ng-container *ngIf="!loading">
+                          @if(!loading){
                             Connexion <i class="fas fa-sign-in-alt ms-1"></i>
-                          </ng-container>
-                          <ng-container *ngIf="loading">
+                          }
+                          @if(loading){
                             <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                             connexion en cours...
-                          </ng-container>
+                          }
                         </button>
                       </div>
                     </div>
