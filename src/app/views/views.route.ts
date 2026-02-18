@@ -1,4 +1,6 @@
 import { Route } from '@angular/router'
+import { ImpactFamiliesComponent } from './admin/impact-families/impact-families.component'
+import { authGuard } from '../core/service/auth.guard'
 
 export const VIEW_ROUTES: Route[] = [
   {
@@ -7,6 +9,12 @@ export const VIEW_ROUTES: Route[] = [
       import('./dashboards/dashboards.route').then(
         (mod) => mod.DASHBOARD_ROUTES
       ),
+  },
+  {
+    path: 'impact-families',
+    component: ImpactFamiliesComponent,
+    canActivate: [authGuard],
+    data: { title: 'Famille d\'impact' },
   },
   {
     path: 'apps',
