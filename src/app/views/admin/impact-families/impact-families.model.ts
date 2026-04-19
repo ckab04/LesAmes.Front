@@ -1,5 +1,5 @@
 export interface ImpactFamily {
-    id: number|undefined;
+    id: string|undefined;
     name: string|undefined;
     address: string|undefined;
     neighborHood: string|undefined;

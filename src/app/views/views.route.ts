@@ -17,6 +17,12 @@ export const VIEW_ROUTES: Route[] = [
     data: { title: 'Famille d\'impact' },
   },
   {
+    path: 'impact-families/:impactFamilyId',
+    component: ImpactFamiliesComponent,
+    canActivate: [authGuard],
+    data: { title: 'Famille d\'impact' },
+  },
+  {
     path: 'apps',
     loadChildren: () =>
       import('./applications/apps.route').then((mod) => mod.APPS_ROUTES),

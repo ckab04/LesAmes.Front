@@ -4,8 +4,16 @@
     <div class="card">
       <div class="card-header">
         <div class="row align-items-center">
-          <div class="col">
-            <h4 class="card-title">Ajouter une famille d'impact</h4>
+          <div class="col text-center">
+            @if (impactFamilyId) {
+              <h4 class="card-title">
+                Modifier une famille d'impact
+                &nbsp;
+                <a class="btn btn-sm btn-outline-primary" [routerLink]="['/impact-families']">Retourner à la liste</a>
+              </h4>
+            } @else {
+              <h4 class="card-title">Ajouter une famille d'impact</h4>
+            }
           </div>
           <!--end col-->
         </div>
@@ -88,7 +96,11 @@
             </div>
             <div class="row">
               <div class="col-sm-10 offset-sm-2">
-                <button class="btn btn-primary" [disabled]="!impactFamilyForm.valid" type="submit">Ajouter</button>
+                @if (impactFamilyId) {
+                  <button class="btn btn-primary" [disabled]="!impactFamilyForm.valid" type="submit">Modifier</button>
+                } @else {
+                  <button class="btn btn-primary" [disabled]="!impactFamilyForm.valid" type="submit">Ajouter</button>
+                }
               </div>
             </div>
           </div>
@@ -104,6 +116,7 @@
   <!--end col-->
 </div>
 <!--end row-->
+@if (!impactFamilyId) {
   <div class="col-12">
     <div class="card">
       <div class="card-header">
@@ -118,36 +131,41 @@
       <!--end card-header-->
       <div class="card-body pt-0">
         <div class="table-responsive">
-          <table class="table mb-0">
-            <thead class="table-light">
-              <tr>
-                  <th>Famille d'impact</th>
-                  <th>Adresse</th>
-                  <th>Quartier</th>
-                  <th>Pilote</th>
-                  <th>Contact pilote</th>
-                  <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (impactFamily of impactFamilies; track $index) {
+            <table class="table mb-0">
+              <thead class="table-light">
                 <tr>
-                  <th scope="row">{{ impactFamily.name }}</th>
-                  <td>{{ impactFamily.address }}</td>
-                  <td>{{ impactFamily.neighborHood }}</td>
-                  <td>{{ impactFamily.pilot }}</td>
-                  <td>{{ impactFamily.pilotContact }}</td>
-                  <td><button class="btn btn-sm btn-outline-danger">Supprimer</button></td>
+                    <th>Famille d'impact</th>
+                    <th>Adresse</th>
+                    <th>Quartier</th>
+                    <th>Pilote</th>
+                    <th>Contact pilote</th>
+                    <th></th>
                 </tr>
-              }
-            </tbody>
-          </table>
-          <!--end /table-->
+              </thead>
+              <tbody>
+                @for (impactFamily of impactFamilies; track $index) {
+                  <tr>
+                    <th scope="row">{{ impactFamily.name }}</th>
+                    <td>{{ impactFamily.address }}</td>
+                    <td>{{ impactFamily.neighborHood }}</td>
+                    <td>{{ impactFamily.pilot }}</td>
+                    <td>{{ impactFamily.pilotContact }}</td>
+                    <td>
+                      <a class="btn btn-sm btn-outline-primary" [routerLink]="['/impact-families', impactFamily.id]">Modifier</a>
+                      &nbsp;
+                      <button (click)="deleteImpactFamily(impactFamily.id)" class="btn btn-sm btn-outline-danger">Supprimer</button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+            <!--end /table-->
+          </div>
+          <!--end /tableresponsive-->
         </div>
-        <!--end /tableresponsive-->
+        <!--end card-body-->
       </div>
-      <!--end card-body-->
+      <!--end card-->
     </div>
-    <!--end card-->
-  </div>
+  }
   <!--end col-->

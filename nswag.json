@@ -3,7 +3,7 @@
   "defaultVariables": null,
   "documentGenerator": {
     "fromDocument": {
-      "url": "http://127.0.0.1:32771/swagger/v1/swagger.json",
+      "url": "http://127.0.0.1:32770/swagger/v1/swagger.json",
       "output": null,
       "newLineBehavior": "Auto"
     }
@@ -25,7 +25,7 @@
       "nullValue": "Undefined",
       "generateClientClasses": true,
       "generateClientInterfaces": true,
-      "generateOptionalParameters": true,
+      "generateOptionalParameters": false,
       "exportTypes": true,
       "wrapDtoExceptions": false,
       "exceptionClass": "SwaggerException",
@@ -39,7 +39,7 @@
       "useTransformOptionsMethod": false,
       "useTransformResultMethod": false,
       "generateDtoTypes": true,
-      "operationGenerationMode": "SingleClientFromOperationId",
+      "operationGenerationMode": "MultipleClientsFromOperationId",
       "markOptionalProperties": true,
       "generateCloneMethod": false,
       "typeStyle": "Class",
@@ -52,8 +52,8 @@
       "excludedTypeNames": [],
       "excludedParameterNames": [],
       "handleReferences": false,
-      "generateTypeCheckFunctions": false,
-      "generateConstructorInterface": true,
+      "generateTypeCheckFunctions": true,
+      "generateConstructorInterface": false,
       "convertConstructorInterfaceData": false,
       "importRequiredTypes": true,
       "useGetBaseUrlMethod": false,
