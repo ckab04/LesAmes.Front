@@ -46,18 +46,20 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.submitted = true;
-    console.log("Is it coming here ??");
-    /*
+    //this.submitted = true;
+
     if (this.signInForm.valid) {
       const email = this.formValues["email"].value;
       const password = this.formValues["password"].value;
 
+      console.log("email = ", email);
+      console.log("Password = ", password);
+
       // Login Api
       this.store.dispatch(login({ email: email, password: password }));
-      } */
+      this.route.navigate(["/starter"]);
+    }
 
-    console.log("Logging IN");
-    this.route.navigate(["/starter"]);
+    //console.log("Logging IN");
   }
 }
