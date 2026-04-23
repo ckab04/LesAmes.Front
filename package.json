@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:dev": "ng serve --configuration=development",
     "build": "ng build",
     "nswag": "nswag run nswag.json /runtime:Net90",
     "watch": "ng build --watch --configuration development",

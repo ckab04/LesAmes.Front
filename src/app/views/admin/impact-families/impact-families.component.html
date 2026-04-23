@@ -1,0 +1,171 @@
+<div class="row justify-content-center">
+  <form [formGroup]="impactFamilyForm" (ngSubmit)="onSubmit()">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col text-center">
+            @if (impactFamilyId) {
+              <h4 class="card-title">
+                Modifier une famille d'impact
+                &nbsp;
+                <a class="btn btn-sm btn-outline-primary" [routerLink]="['/impact-families']">Retourner à la liste</a>
+              </h4>
+            } @else {
+              <h4 class="card-title">Ajouter une famille d'impact</h4>
+            }
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="mb-3 row">
+              <label
+                for="example-text-input"
+                class="col-sm-2 col-form-label text-lg-end"
+                >Famille d'impact</label
+              >
+              <div class="col-sm-10">
+                <input
+                  class="form-control"
+                  type="text"
+                  formControlName="name"
+                />
+              </div>
+            </div>
+            <div class="mb-3 row">
+              <label
+                for="example-text-input"
+                class="col-sm-2 col-form-label text-lg-end"
+                >Adresse</label
+              >
+              <div class="col-sm-10">
+                <input
+                  class="form-control"
+                  type="text"
+                  formControlName="address"
+                />
+              </div>
+            </div>
+            <div class="mb-3 row">
+              <label
+                for="example-text-input"
+                class="col-sm-2 col-form-label text-lg-end"
+                >Quartier</label
+              >
+              <div class="col-sm-10">
+                <input
+                  class="form-control"
+                  type="text"
+                  formControlName="neighborHood"
+                />
+              </div>
+            </div>
+            <div class="mb-3 row">
+              <label
+                for="example-text-input"
+                class="col-sm-2 col-form-label text-lg-end"
+                >Pilote</label
+              >
+              <div class="col-sm-10">
+                <input
+                  class="form-control"
+                  type="text"
+                  formControlName="pilot"
+                  id="example-text-input"
+                />
+              </div>
+            </div>
+            <div class="mb-3 row">
+              <label
+                for="example-text-input"
+                class="col-sm-2 col-form-label text-lg-end"
+                >Contact pilote</label
+              >
+              <div class="col-sm-10">
+                <input
+                  class="form-control"
+                  type="text"
+                  formControlName="pilotContact"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-10 offset-sm-2">
+                @if (impactFamilyId) {
+                  <button class="btn btn-primary" [disabled]="!impactFamilyForm.valid" type="submit">Modifier</button>
+                } @else {
+                  <button class="btn btn-primary" [disabled]="!impactFamilyForm.valid" type="submit">Ajouter</button>
+                }
+              </div>
+            </div>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-body-->
+    </div>
+    <!--end card-->
+  </div>
+  </form>
+  <!--end col-->
+</div>
+<!--end row-->
+@if (!impactFamilyId) {
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <h4 class="card-title">Liste des familles d'impact</h4>
+          </div>
+          <!--end col-->
+        </div>
+        <!--end row-->
+      </div>
+      <!--end card-header-->
+      <div class="card-body pt-0">
+        <div class="table-responsive">
+            <table class="table mb-0">
+              <thead class="table-light">
+                <tr>
+                    <th>Famille d'impact</th>
+                    <th>Adresse</th>
+                    <th>Quartier</th>
+                    <th>Pilote</th>
+                    <th>Contact pilote</th>
+                    <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (impactFamily of impactFamilies; track $index) {
+                  <tr>
+                    <th scope="row">{{ impactFamily.name }}</th>
+                    <td>{{ impactFamily.address }}</td>
+                    <td>{{ impactFamily.neighborHood }}</td>
+                    <td>{{ impactFamily.pilot }}</td>
+                    <td>{{ impactFamily.pilotContact }}</td>
+                    <td>
+                      <a class="btn btn-sm btn-outline-primary" [routerLink]="['/impact-families', impactFamily.id]">Modifier</a>
+                      &nbsp;
+                      <button (click)="deleteImpactFamily(impactFamily.id)" class="btn btn-sm btn-outline-danger">Supprimer</button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+            <!--end /table-->
+          </div>
+          <!--end /tableresponsive-->
+        </div>
+        <!--end card-body-->
+      </div>
+      <!--end card-->
+    </div>
+  }
+  <!--end col-->

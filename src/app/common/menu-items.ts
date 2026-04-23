@@ -3,13 +3,13 @@ import { MenuItem } from '../core/models/menu.model'
 export const MENU_ITEMS: MenuItem[] = [
   {
     key: 'main',
-    label: 'Main Menu',
+    label: 'Menu principal',
     isTitle: true,
   },
   {
     key: 'dashboards',
     icon: 'iconoir-home-simple',
-    label: 'Dashboards',
+    label: 'Tableau de bord',
     collapsed: false,
     subMenu: [
       {
@@ -25,6 +25,14 @@ export const MENU_ITEMS: MenuItem[] = [
         parentKey: 'dashboards',
       },
     ],
+  },
+  {
+    key: 'impact-families',
+    icon: 'iconoir-keyframes-couple',
+    label: 'Familles d\'impact',
+    url: '/impact-families',
+    isTitle: false,
+    collapsed: false,
   },
   {
     key: 'apps',
