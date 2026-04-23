@@ -11,6 +11,8 @@
 //   disabled?: boolean
 // }
 
+import type { Role } from '@/app/common/roles'
+
 export interface MenuItem {
   key: string
   label: string
@@ -24,5 +26,6 @@ export interface MenuItem {
     text: string
     variant: string
   }
+  roles?: Role[]
   subMenu?: any
 }

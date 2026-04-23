@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators'
 import { WebApiService } from './web-api-service.service'
 import { User } from '../helpers/fake-backend'
 import { AuthenticatedUserInfoDto } from '@/app/api/client'
+import type { Role } from '@/app/common/roles'
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
@@ -17,9 +18,9 @@ export class AuthenticationService {
 
   get token(): string | null { return localStorage.getItem(this.accessKey); }
   get refreshToken(): string | null { return localStorage.getItem(this.refreshKey); }
-  get roles(): string[] {
+  get roles(): Role[] {
     const raw = localStorage.getItem(this.rolesKey);
-    return raw ? JSON.parse(raw) : [];
+    return raw ? (JSON.parse(raw) as Role[]) : [];
   }
 
   setSession(access: string, refresh: string, roles: string[]): void {
@@ -45,7 +46,7 @@ export class AuthenticationService {
     } catch { return true; }
   }
 
-  hasRole(role: string): boolean {
+  hasRole(role: Role): boolean {
     return this.roles.includes(role);
   }
 

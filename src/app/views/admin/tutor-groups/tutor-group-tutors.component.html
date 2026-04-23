@@ -1,0 +1,81 @@
+<div class="container-xxl">
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="page-title-box d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Tuteurs par groupe</h4>
+        <a [routerLink]="['/tutor-groups/create']" class="btn btn-sm btn-outline-primary">
+          Gérer les groupes
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          @if (errorMessage) {
+            <div class="alert alert-danger" role="alert">
+              {{ errorMessage }}
+            </div>
+          }
+
+          <div class="form-group mb-3" style="max-width: 400px;">
+            <label class="form-label" for="group">Sélectionner un groupe</label>
+            <select
+              id="group"
+              class="form-select"
+              [formControl]="selectedGroupId"
+            >
+              <option value="">— Choisir un groupe —</option>
+              @for (group of groups; track group.id) {
+                <option [value]="group.id">{{ group.name }}</option>
+              }
+            </select>
+          </div>
+
+          @if (loading) {
+            <div class="text-center py-4">
+              <span
+                class="spinner-border text-primary"
+                role="status"
+                aria-hidden="true"
+              ></span>
+            </div>
+          } @else if (selectedGroupId.value) {
+            @if (tutors.length === 0) {
+              <div class="text-center text-muted py-4">
+                Aucun tuteur dans ce groupe.
+              </div>
+            } @else {
+              <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                  <thead>
+                    <tr>
+                      <th>Nom complet</th>
+                      <th>Email</th>
+                      <th>Téléphone</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (tutor of tutors; track tutor.id) {
+                      <tr>
+                        <td>{{ fullName(tutor) }}</td>
+                        <td>{{ tutor.email || '—' }}</td>
+                        <td>{{ tutor.phoneNumber || '—' }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            }
+          } @else {
+            <div class="text-center text-muted py-4">
+              Choisissez un groupe pour afficher la liste des tuteurs.
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,11 @@
 import { Route } from '@angular/router'
 import { ImpactFamiliesComponent } from './admin/impact-families/impact-families.component'
+import { TutorGroupsCreateComponent } from './admin/tutor-groups/tutor-groups-create.component'
+import { TutorGroupTutorsComponent } from './admin/tutor-groups/tutor-group-tutors.component'
+import { SoulAssignmentsComponent } from './admin/soul-assignments/soul-assignments.component'
 import { authGuard } from '../core/service/auth.guard'
+import { roleGuard } from '../core/service/role.guard'
+import { Roles } from '../common/roles'
 
 export const VIEW_ROUTES: Route[] = [
   {
@@ -21,6 +26,33 @@ export const VIEW_ROUTES: Route[] = [
     component: ImpactFamiliesComponent,
     canActivate: [authGuard],
     data: { title: 'Famille d\'impact' },
+  },
+  {
+    path: 'tutor-groups/create',
+    component: TutorGroupsCreateComponent,
+    canActivate: [authGuard, roleGuard],
+    data: {
+      title: 'Création groupes tuteurs',
+      roles: [Roles.ADMIN, Roles.SUPER_ADMIN],
+    },
+  },
+  {
+    path: 'tutor-groups/list-tutors',
+    component: TutorGroupTutorsComponent,
+    canActivate: [authGuard, roleGuard],
+    data: {
+      title: 'Tuteurs par groupe',
+      roles: [Roles.ADMIN, Roles.SUPER_ADMIN],
+    },
+  },
+  {
+    path: 'tutor-groups/soul-assignments',
+    component: SoulAssignmentsComponent,
+    canActivate: [authGuard, roleGuard],
+    data: {
+      title: 'Affectation âmes ↔ groupes tuteurs',
+      roles: [Roles.ADMIN, Roles.SUPER_ADMIN],
+    },
   },
   {
     path: 'apps',

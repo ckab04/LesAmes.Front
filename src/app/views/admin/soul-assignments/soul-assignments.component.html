@@ -1,0 +1,143 @@
+<div class="container-xxl">
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="page-title-box">
+        <h4 class="mb-0">Affectation des âmes aux groupes de tuteurs</h4>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          @if (errorMessage) {
+            <div class="alert alert-danger" role="alert">
+              {{ errorMessage }}
+            </div>
+          }
+
+          <div class="form-group mb-3" style="max-width: 400px;">
+            <label class="form-label" for="group">
+              Sélectionner un groupe
+            </label>
+            <select
+              id="group"
+              class="form-select"
+              [formControl]="selectedGroupId"
+            >
+              <option value="">— Choisir un groupe —</option>
+              @for (group of groups; track group.id) {
+                <option [value]="group.id">{{ group.name }}</option>
+              }
+            </select>
+          </div>
+
+          @if (!selectedGroupId.value) {
+            <div class="text-center text-muted py-4">
+              Choisissez un groupe pour gérer ses affectations.
+            </div>
+          } @else if (loadingLists) {
+            <div class="text-center py-4">
+              <span
+                class="spinner-border text-primary"
+                role="status"
+                aria-hidden="true"
+              ></span>
+            </div>
+          } @else {
+            <div class="row">
+              <div class="col-lg-6">
+                <h6 class="text-muted text-uppercase mb-2">
+                  Âmes disponibles ({{ availableSouls.length }})
+                </h6>
+                @if (availableSouls.length === 0) {
+                  <div class="text-muted py-3">
+                    Toutes les âmes sont déjà affectées à ce groupe.
+                  </div>
+                } @else {
+                  <div class="table-responsive">
+                    <table class="table table-sm table-hover mb-0">
+                      <thead>
+                        <tr>
+                          <th>Nom</th>
+                          <th>Quartier</th>
+                          <th class="text-end">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (soul of availableSouls; track soul.id) {
+                          <tr>
+                            <td>{{ fullName(soul) }}</td>
+                            <td class="text-muted">
+                              {{ soul.quartier || '—' }}
+                            </td>
+                            <td class="text-end">
+                              <button
+                                type="button"
+                                class="btn btn-sm btn-outline-primary"
+                                (click)="assign(soul)"
+                                [disabled]="isBusy(soul.id)"
+                              >
+                                Affecter
+                                <i class="fas fa-arrow-right ms-1"></i>
+                              </button>
+                            </td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                }
+              </div>
+
+              <div class="col-lg-6">
+                <h6 class="text-muted text-uppercase mb-2">
+                  Âmes du groupe ({{ groupSouls.length }})
+                </h6>
+                @if (groupSouls.length === 0) {
+                  <div class="text-muted py-3">
+                    Aucune âme dans ce groupe pour le moment.
+                  </div>
+                } @else {
+                  <div class="table-responsive">
+                    <table class="table table-sm table-hover mb-0">
+                      <thead>
+                        <tr>
+                          <th>Nom</th>
+                          <th>Quartier</th>
+                          <th class="text-end">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (soul of groupSouls; track soul.id) {
+                          <tr>
+                            <td>{{ fullName(soul) }}</td>
+                            <td class="text-muted">
+                              {{ soul.quartier || '—' }}
+                            </td>
+                            <td class="text-end">
+                              <button
+                                type="button"
+                                class="btn btn-sm btn-outline-danger"
+                                (click)="remove(soul)"
+                                [disabled]="isBusy(soul.id)"
+                              >
+                                <i class="fas fa-arrow-left me-1"></i>
+                                Retirer
+                              </button>
+                            </td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

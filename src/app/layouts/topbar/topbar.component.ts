@@ -1,5 +1,6 @@
 import { changetheme } from '@/app/store/layout/layout-action'
 import { getLayoutColor } from '@/app/store/layout/layout-selector'
+import { logout } from '@/app/store/authentication/authentication.actions'
 import { Component, EventEmitter, Output, inject } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { NgbDropdownModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap'
@@ -39,6 +40,10 @@ export class TopbarComponent {
 
   toggleMobileMenu() {
     this.mobileMenuButtonClicked.emit()
+  }
+
+  logout() {
+    this.store.dispatch(logout())
   }
 
   // Change Theme

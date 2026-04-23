@@ -1,4 +1,5 @@
 import { MenuItem } from '../core/models/menu.model'
+import { Roles } from './roles'
 
 export const MENU_ITEMS: MenuItem[] = [
   {
@@ -33,6 +34,36 @@ export const MENU_ITEMS: MenuItem[] = [
     url: '/impact-families',
     isTitle: false,
     collapsed: false,
+  },
+  {
+    key: 'tutor-groups',
+    icon: 'iconoir-group',
+    label: 'Groupes de tuteurs',
+    collapsed: true,
+    roles: [Roles.ADMIN, Roles.SUPER_ADMIN],
+    subMenu: [
+      {
+        key: 'tutor-groups-create',
+        label: 'Création groupes tuteurs',
+        url: '/tutor-groups/create',
+        parentKey: 'tutor-groups',
+        roles: [Roles.ADMIN, Roles.SUPER_ADMIN],
+      },
+      {
+        key: 'tutor-groups-list-tutors',
+        label: 'Liste tuteurs par groupe',
+        url: '/tutor-groups/list-tutors',
+        parentKey: 'tutor-groups',
+        roles: [Roles.ADMIN, Roles.SUPER_ADMIN],
+      },
+      {
+        key: 'tutor-groups-soul-assignments',
+        label: 'Affectation âmes',
+        url: '/tutor-groups/soul-assignments',
+        parentKey: 'tutor-groups',
+        roles: [Roles.ADMIN, Roles.SUPER_ADMIN],
+      },
+    ],
   },
   {
     key: 'apps',

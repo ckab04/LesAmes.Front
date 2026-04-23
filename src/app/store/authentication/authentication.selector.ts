@@ -9,14 +9,14 @@ export const getUser = createSelector(
   (state: AuthenticationState) => state.user
 )
 
-export const getToken = createSelector(
-  getUserState,
-  (state: AuthenticationState) => state.user?.token
-)
-
 export const getisLoggedIn = createSelector(
   getUserState,
   (state: AuthenticationState) => state.isLoggedIn
+)
+
+export const getLoading = createSelector(
+  getUserState,
+  (state: AuthenticationState) => state.loading
 )
 
 export const getError = createSelector(

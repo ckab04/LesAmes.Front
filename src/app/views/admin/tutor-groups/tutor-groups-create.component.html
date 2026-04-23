@@ -1,0 +1,133 @@
+<div class="container-xxl">
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="page-title-box">
+        <h4 class="mb-0">Création de groupes de tuteurs</h4>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-5">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Nouveau groupe</h5>
+        </div>
+        <div class="card-body">
+          @if (errorMessage) {
+            <div class="alert alert-danger" role="alert">
+              {{ errorMessage }}
+            </div>
+          }
+          @if (successMessage) {
+            <div class="alert alert-success" role="alert">
+              {{ successMessage }}
+            </div>
+          }
+
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="form-group mb-3">
+              <label class="form-label" for="name">Nom du groupe</label>
+              <input
+                type="text"
+                id="name"
+                class="form-control"
+                formControlName="name"
+                placeholder="Nom du groupe"
+                [class.is-invalid]="submitted && controls['name'].invalid"
+              />
+              @if (submitted && controls['name'].errors) {
+                <div class="invalid-feedback d-block">
+                  @if (controls['name'].errors['required']) {
+                    Nom requis.
+                  } @else if (controls['name'].errors['minlength']) {
+                    Le nom doit contenir au moins 3 caractères.
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="form-group mb-3">
+              <label class="form-label" for="description">
+                Description <span class="text-muted">(optionnel)</span>
+              </label>
+              <textarea
+                id="description"
+                class="form-control"
+                rows="3"
+                formControlName="description"
+                placeholder="Description du groupe"
+              ></textarea>
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary" [disabled]="loading">
+                @if (!loading) {
+                  Créer le groupe
+                  <i class="fas fa-plus ms-1"></i>
+                } @else {
+                  <span
+                    class="spinner-border spinner-border-sm me-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Création en cours...
+                }
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-7">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0">Groupes existants</h5>
+          <a [routerLink]="['/tutor-groups/list-tutors']" class="btn btn-sm btn-outline-primary">
+            Voir les tuteurs par groupe
+          </a>
+        </div>
+        <div class="card-body p-0">
+          @if (groups.length === 0) {
+            <div class="p-4 text-center text-muted">
+              Aucun groupe pour le moment.
+            </div>
+          } @else {
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead>
+                  <tr>
+                    <th>Nom</th>
+                    <th>Description</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (group of groups; track group.id) {
+                    <tr>
+                      <td>{{ group.name }}</td>
+                      <td class="text-muted">
+                        {{ group.description || '—' }}
+                      </td>
+                      <td class="text-end">
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-outline-danger"
+                          (click)="deleteGroup(group.id)"
+                          title="Supprimer"
+                        >
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

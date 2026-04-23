@@ -28,18 +28,33 @@
                   [formGroup]="signInForm"
                   (ngSubmit)="login()"
                   class="my-4"
-                  action="index.html"
                 >
+                  @if (errorMessage) {
+                    <div class="alert alert-danger" role="alert">
+                      {{ errorMessage }}
+                    </div>
+                  }
+
                   <div class="form-group mb-2">
                     <label class="form-label" for="username">Email</label>
                     <input
-                      type="text"
+                      type="email"
                       class="form-control"
                       id="username"
                       formControlName="email"
                       name="username"
-                      placeholder="Enter username"
+                      placeholder="Entrez votre email"
+                      [class.is-invalid]="submitted && formValues['email'].invalid"
                     />
+                    @if (submitted && formValues['email'].errors) {
+                      <div class="invalid-feedback d-block">
+                        @if (formValues['email'].errors['required']) {
+                          Email requis.
+                        } @else if (formValues['email'].errors['email']) {
+                          Email invalide.
+                        }
+                      </div>
+                    }
                   </div>
                   <!--end form-group-->
 
@@ -53,17 +68,23 @@
                       name="password"
                       formControlName="password"
                       id="userpassword"
-                      placeholder="Enter password"
+                      placeholder="Entrez votre mot de passe"
+                      [class.is-invalid]="submitted && formValues['password'].invalid"
                     />
+                    @if (submitted && formValues['password'].errors?.['required']) {
+                      <div class="invalid-feedback d-block">
+                        Mot de passe requis.
+                      </div>
+                    }
                   </div>
                   <!--end form-group-->
 
                   <div class="form-group row mt-3">
                     <div class="col-sm-6 text-start">
                       <a
-                        [routerLink]="'/auth/register'"
+                        [routerLink]="'/auth/register-tuteur'"
                         class="text-muted font-13"
-                        ><i class="dripicons-lock"></i> S'enregistrer</a
+                        ><i class="dripicons-user"></i> Inscription tuteur</a
                       >
                     </div>
 
@@ -72,6 +93,14 @@
                         [routerLink]="'/auth/reset-pass'"
                         class="text-muted font-13"
                         ><i class="dripicons-lock"></i> Mot de passe oublié ?</a
+                      >
+                    </div>
+
+                    <div class="col-12 text-center mt-2">
+                      <a
+                        [routerLink]="'/auth/register-ame'"
+                        class="text-muted font-13"
+                        ><i class="dripicons-heart"></i> Inscription âme</a
                       >
                     </div>
 

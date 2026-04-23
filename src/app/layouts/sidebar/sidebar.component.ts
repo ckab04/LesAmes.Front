@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common'
 import { MenuItem } from '@/app/core/models/menu.model'
 import { MENU_ITEMS } from '@/app/common/menu-items'
 import { basePath } from '@/app/common/constants'
+import { AuthenticationService } from '@/app/core/service/auth.service'
 
 @Component({
   selector: 'app-sidebar',
@@ -23,7 +24,8 @@ import { basePath } from '@/app/common/constants'
   styles: ``,
 })
 export class SidebarComponent {
-  menuItems = MENU_ITEMS
+  private auth = inject(AuthenticationService)
+  menuItems: MenuItem[] = this.filterMenuByRole(MENU_ITEMS)
   activeMenuItems: string[] = []
   router = inject(Router)
 
@@ -58,7 +60,19 @@ export class SidebarComponent {
   }
 
   initMenu(): void {
-    this.menuItems = MENU_ITEMS
+    this.menuItems = this.filterMenuByRole(MENU_ITEMS)
+  }
+
+  private filterMenuByRole(items: MenuItem[]): MenuItem[] {
+    return items
+      .filter((item) =>
+        !item.roles?.length || item.roles.some((r) => this.auth.hasRole(r))
+      )
+      .map((item) =>
+        item.subMenu
+          ? { ...item, subMenu: this.filterMenuByRole(item.subMenu) }
+          : item
+      )
   }
 
   /**
