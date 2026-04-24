@@ -1,0 +1,366 @@
+:host {
+  display: block;
+}
+
+.landing-page {
+  background-color: #f7f9fc;
+  color: #22223b;
+
+  a {
+    text-decoration: none;
+  }
+}
+
+/* Navigation */
+.landing-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: rgba(255, 255, 255, 0.92);
+  backdrop-filter: saturate(1.4) blur(8px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+
+  .brand-name {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #22223b;
+    letter-spacing: -0.01em;
+  }
+
+  .nav-links {
+    list-style: none;
+    padding: 0;
+
+    a {
+      color: #4a4e69;
+      font-weight: 500;
+      transition: color 0.15s ease;
+
+      &:hover {
+        color: var(--bs-primary, #2c7be5);
+      }
+    }
+  }
+}
+
+/* Hero */
+.hero-section {
+  padding: 5rem 0 6rem;
+  background:
+    radial-gradient(ellipse at top right, rgba(44, 123, 229, 0.10), transparent 60%),
+    radial-gradient(ellipse at bottom left, rgba(99, 102, 241, 0.08), transparent 55%),
+    linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
+
+  .hero-eyebrow {
+    display: inline-block;
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(44, 123, 229, 0.10);
+    color: var(--bs-primary, #2c7be5);
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 4.5vw, 3.4rem);
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    color: #1a1a2e;
+  }
+
+  .hero-lead {
+    font-size: 1.12rem;
+    line-height: 1.65;
+    color: #4a4e69;
+    max-width: 560px;
+  }
+
+  .hero-stats {
+    .stat-value {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--bs-primary, #2c7be5);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.85rem;
+      color: #4a4e69;
+      margin-top: 0.25rem;
+    }
+  }
+}
+
+.hero-card-stack {
+  position: relative;
+  min-height: 380px;
+
+  .hero-card {
+    position: absolute;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 20px 40px -20px rgba(30, 41, 59, 0.18);
+    padding: 1rem 1.25rem;
+    min-width: 280px;
+
+    &-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+  }
+
+  .hero-card-1 {
+    top: 20px;
+    left: 10%;
+    width: 80%;
+    z-index: 3;
+  }
+
+  .hero-card-2 {
+    top: 150px;
+    left: 0;
+    z-index: 2;
+    transform: rotate(-2deg);
+  }
+
+  .hero-card-3 {
+    top: 270px;
+    right: 0;
+    z-index: 1;
+    transform: rotate(2deg);
+  }
+}
+
+/* Sections */
+.section {
+  padding: 5rem 0;
+
+  &-light {
+    background-color: #ffffff;
+  }
+
+  &-eyebrow {
+    display: inline-block;
+    padding: 0.3rem 0.85rem;
+    border-radius: 999px;
+    background: rgba(44, 123, 229, 0.10);
+    color: var(--bs-primary, #2c7be5);
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  &-title {
+    font-size: clamp(1.6rem, 3vw, 2.3rem);
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    color: #1a1a2e;
+  }
+
+  &-lead {
+    font-size: 1.05rem;
+    color: #4a4e69;
+    max-width: 680px;
+  }
+}
+
+/* Value cards */
+.value-card {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 14px;
+  padding: 1.75rem;
+  height: 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -20px rgba(30, 41, 59, 0.15);
+  }
+
+  .value-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: rgba(44, 123, 229, 0.12);
+    color: var(--bs-primary, #2c7be5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    margin-bottom: 1rem;
+  }
+
+  h5 {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: #4a4e69;
+    margin-bottom: 0;
+  }
+}
+
+/* Role cards */
+.role-card {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 16px;
+  padding: 2rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -20px rgba(30, 41, 59, 0.15);
+  }
+
+  &-featured {
+    border-color: rgba(44, 123, 229, 0.2);
+    box-shadow: 0 20px 40px -20px rgba(44, 123, 229, 0.3);
+  }
+
+  .role-badge {
+    align-self: flex-start;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+  }
+
+  h4 {
+    font-weight: 700;
+    color: #1a1a2e;
+  }
+
+  p {
+    color: #4a4e69;
+    flex: 1;
+  }
+
+  .role-link {
+    color: var(--bs-primary, #2c7be5);
+    font-weight: 600;
+    margin-top: 1rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+/* Steps */
+.steps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1.5rem;
+
+  .step {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+
+    .step-num {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bs-primary, #2c7be5);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    h6 {
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    p {
+      color: #4a4e69;
+      margin-bottom: 0;
+      font-size: 0.95rem;
+    }
+  }
+}
+
+/* CTA */
+.section-cta {
+  background: linear-gradient(135deg, #2c7be5 0%, #6366f1 100%);
+  padding: 4rem 0;
+}
+
+.cta-box {
+  max-width: 720px;
+  margin: 0 auto;
+
+  h2 {
+    font-size: clamp(1.6rem, 3vw, 2.3rem);
+    font-weight: 800;
+    letter-spacing: -0.015em;
+  }
+}
+
+/* Footer */
+.landing-footer {
+  background-color: #1a1a2e;
+  color: #d6d6e7;
+  padding: 3.5rem 0 1.5rem;
+
+  .brand-name {
+    font-weight: 700;
+    font-size: 1.15rem;
+  }
+
+  h6 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+  }
+
+  ul li {
+    margin-bottom: 0.5rem;
+
+    a {
+      color: #a0a0c0;
+      font-size: 0.92rem;
+      transition: color 0.15s ease;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+
+  hr {
+    opacity: 0.25;
+    margin: 2rem 0 1rem;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .hero-section {
+    padding: 3rem 0 4rem;
+  }
+
+  .hero-card-stack {
+    min-height: 340px;
+    margin-top: 2.5rem;
+  }
+}

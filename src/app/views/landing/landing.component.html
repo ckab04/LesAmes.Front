@@ -1,0 +1,276 @@
+<div class="landing-page">
+
+  <nav class="landing-nav">
+    <div class="container-xxl d-flex align-items-center justify-content-between py-3">
+      <a routerLink="/" class="d-flex align-items-center text-decoration-none">
+        <img src="assets/images/logo-sm.png" alt="Les Âmes" height="40" class="me-2" />
+        <span class="brand-name">Les Âmes</span>
+      </a>
+
+      <ul class="nav-links d-none d-lg-flex align-items-center gap-4 mb-0">
+        <li><a href="#mission">Notre mission</a></li>
+        <li><a href="#fonctionnement">Comment ça marche</a></li>
+        <li><a href="#rejoindre">Rejoindre</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+
+      <div class="d-flex align-items-center gap-2">
+        @if (isLoggedIn$ | async) {
+          <button class="btn btn-primary" (click)="goToDashboard()">
+            Mon espace <i class="fas fa-arrow-right ms-1"></i>
+          </button>
+        } @else {
+          <a routerLink="/auth/log-in" class="btn btn-outline-primary d-none d-sm-inline-block">
+            Se connecter
+          </a>
+          <a routerLink="/auth/register-tuteur" class="btn btn-primary">
+            S'inscrire
+          </a>
+        }
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero-section">
+    <div class="container-xxl">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-7">
+          <span class="hero-eyebrow">Une église qui prend soin de chaque âme</span>
+          <h1 class="hero-title mt-3">
+            Accompagner chaque âme vers une <span class="text-primary">croissance spirituelle</span> durable.
+          </h1>
+          <p class="hero-lead mt-3">
+            <strong>Les Âmes</strong> est une plateforme dédiée au suivi pastoral et au mentorat. Elle relie les nouvelles âmes à des tuteurs formés, organisés en groupes par familles d'impact, pour ne laisser personne sur le bord du chemin.
+          </p>
+          <div class="hero-actions mt-4 d-flex flex-wrap gap-3">
+            <a routerLink="/auth/register-ame" class="btn btn-primary btn-lg">
+              <i class="dripicons-heart me-2"></i> Inscription d'une âme
+            </a>
+            <a routerLink="/auth/register-tuteur" class="btn btn-outline-primary btn-lg">
+              <i class="dripicons-user me-2"></i> Devenir tuteur
+            </a>
+          </div>
+          <div class="hero-stats mt-5 d-flex flex-wrap gap-4">
+            <div>
+              <div class="stat-value">100%</div>
+              <div class="stat-label">Suivi personnalisé</div>
+            </div>
+            <div>
+              <div class="stat-value">3</div>
+              <div class="stat-label">Rôles complémentaires</div>
+            </div>
+            <div>
+              <div class="stat-value">∞</div>
+              <div class="stat-label">Vies impactées</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <div class="hero-card-stack">
+            <div class="hero-card hero-card-1">
+              <div class="d-flex align-items-center mb-2">
+                <div class="hero-card-icon bg-primary-subtle text-primary">
+                  <i class="fas fa-users"></i>
+                </div>
+                <div class="ms-3">
+                  <div class="fw-semibold">Groupe Galilée</div>
+                  <small class="text-muted">12 âmes accompagnées</small>
+                </div>
+              </div>
+              <div class="progress" style="height: 6px;">
+                <div class="progress-bar bg-primary" style="width: 78%"></div>
+              </div>
+            </div>
+
+            <div class="hero-card hero-card-2">
+              <div class="d-flex align-items-center">
+                <div class="hero-card-icon bg-success-subtle text-success">
+                  <i class="fas fa-hand-holding-heart"></i>
+                </div>
+                <div class="ms-3">
+                  <div class="fw-semibold">Nouvelle âme accueillie</div>
+                  <small class="text-muted">Affectée à un tuteur</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-card hero-card-3">
+              <div class="d-flex align-items-center">
+                <div class="hero-card-icon bg-warning-subtle text-warning">
+                  <i class="fas fa-seedling"></i>
+                </div>
+                <div class="ms-3">
+                  <div class="fw-semibold">Familles d'impact</div>
+                  <small class="text-muted">Croissance organisée</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section id="mission" class="section section-light">
+    <div class="container-xxl">
+      <div class="text-center mb-5">
+        <span class="section-eyebrow">Notre mission</span>
+        <h2 class="section-title mt-2">Personne n'est laissé seul.</h2>
+        <p class="section-lead mx-auto">
+          Nous croyons que la croissance spirituelle se vit en communauté. Les Âmes structure le suivi pastoral pour qu'aucun nouveau venu ne se perde, qu'aucun appel ne reste sans réponse.
+        </p>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="value-card">
+            <div class="value-icon"><i class="fas fa-heart"></i></div>
+            <h5>Accueillir</h5>
+            <p>Chaque nouvelle âme est inscrite et confiée à un tuteur dès son arrivée.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="value-card">
+            <div class="value-icon"><i class="fas fa-route"></i></div>
+            <h5>Accompagner</h5>
+            <p>Les tuteurs suivent leurs filleuls par tranche d'âge et besoins spécifiques.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="value-card">
+            <div class="value-icon"><i class="fas fa-tree"></i></div>
+            <h5>Faire grandir</h5>
+            <p>Les familles d'impact organisent la croissance en groupes durables.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="fonctionnement" class="section">
+    <div class="container-xxl">
+      <div class="text-center mb-5">
+        <span class="section-eyebrow">Comment ça marche</span>
+        <h2 class="section-title mt-2">Trois rôles, une seule mission.</h2>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="role-card">
+            <div class="role-badge bg-primary-subtle text-primary">Âme</div>
+            <h4>Une nouvelle âme</h4>
+            <p>S'inscrit en quelques minutes pour rejoindre la communauté et bénéficier d'un suivi personnalisé.</p>
+            <a routerLink="/auth/register-ame" class="role-link">
+              S'inscrire comme âme <i class="fas fa-arrow-right ms-1"></i>
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="role-card role-card-featured">
+            <div class="role-badge bg-success-subtle text-success">Tuteur</div>
+            <h4>Un tuteur</h4>
+            <p>S'engage à accompagner les âmes confiées dans leur tranche d'âge avec écoute et bienveillance.</p>
+            <a routerLink="/auth/register-tuteur" class="role-link">
+              Devenir tuteur <i class="fas fa-arrow-right ms-1"></i>
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="role-card">
+            <div class="role-badge bg-warning-subtle text-warning">Admin</div>
+            <h4>Un administrateur</h4>
+            <p>Organise les groupes, affecte les âmes aux tuteurs et veille à l'équilibre du suivi pastoral.</p>
+            <a routerLink="/auth/log-in" class="role-link">
+              Accéder à l'espace <i class="fas fa-arrow-right ms-1"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-5">
+        <div class="col-lg-10 mx-auto">
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div>
+                <h6>Inscription</h6>
+                <p>L'âme ou le tuteur remplit un formulaire simple en français.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div>
+                <h6>Affectation</h6>
+                <p>L'administrateur affecte l'âme à un groupe de tuteurs adapté.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div>
+                <h6>Suivi</h6>
+                <p>Le tuteur accompagne l'âme dans sa croissance spirituelle.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="rejoindre" class="section section-cta">
+    <div class="container-xxl">
+      <div class="cta-box text-center">
+        <h2 class="text-white">Prêt à faire partie de l'aventure ?</h2>
+        <p class="text-white-50 mt-3 mb-4">
+          Que vous cherchiez à être accompagné ou à servir, votre place est ici.
+        </p>
+        <div class="d-flex flex-wrap gap-3 justify-content-center">
+          <a routerLink="/auth/register-ame" class="btn btn-light btn-lg">
+            Inscription âme
+          </a>
+          <a routerLink="/auth/register-tuteur" class="btn btn-outline-light btn-lg">
+            Inscription tuteur
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact" class="landing-footer">
+    <div class="container-xxl">
+      <div class="row gy-4">
+        <div class="col-md-5">
+          <div class="d-flex align-items-center mb-3">
+            <img src="assets/images/logo-sm.png" alt="Les Âmes" height="36" class="me-2" />
+            <span class="brand-name text-white">Les Âmes</span>
+          </div>
+          <p class="text-white-50 mb-0">
+            Une plateforme au service du suivi pastoral et du mentorat communautaire.
+          </p>
+        </div>
+        <div class="col-md-3 col-6">
+          <h6 class="text-white">Plateforme</h6>
+          <ul class="list-unstyled">
+            <li><a href="#mission">Notre mission</a></li>
+            <li><a href="#fonctionnement">Comment ça marche</a></li>
+            <li><a routerLink="/auth/log-in">Se connecter</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 col-6">
+          <h6 class="text-white">Rejoindre</h6>
+          <ul class="list-unstyled">
+            <li><a routerLink="/auth/register-ame">Inscription âme</a></li>
+            <li><a routerLink="/auth/register-tuteur">Inscription tuteur</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr class="border-secondary" />
+      <div class="d-flex flex-wrap justify-content-between text-white-50">
+        <small>© {{ currentYear }} Les Âmes. Tous droits réservés.</small>
+        <small>Fait avec <i class="fas fa-heart text-danger"></i> pour l'Église.</small>
+      </div>
+    </div>
+  </footer>
+
+</div>

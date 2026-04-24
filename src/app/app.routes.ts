@@ -6,14 +6,15 @@ import { MaintenanceComponent } from "./views/auth/maintenance/maintenance.compo
 import { authGuard } from "./core/service/auth.guard";
 import { ProjectComponent } from "./views/applications/projects/project/project.component";
 import { ClientsComponent } from "./views/applications/projects/clients/clients.component";
-import { LoginComponent } from "./views/auth/login/login.component";
 import { StarterComponent } from "./views/pages/starter/starter.component";
+import { LandingComponent } from "./views/landing/landing.component";
 
 export const routes: Routes = [
   {
     path: "",
-    component: LoginComponent,
+    component: LandingComponent,
     pathMatch: "full",
+    data: { title: "Les Âmes — Accueil" },
   },
   {
     path: "projects",
@@ -23,11 +24,6 @@ export const routes: Routes = [
   {
     path: "souls",
     component: ClientsComponent,
-    pathMatch: "full",
-  },
-  {
-    path: "",
-    redirectTo: "dashboard/analytics",
     pathMatch: "full",
   },
   {
